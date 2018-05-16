@@ -1,7 +1,7 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Author: itssme
+ * usage:
+ *   Provides all functions and calculations for the game
  */
 
 var miner_define = [];
@@ -30,8 +30,7 @@ for (i = 0; i < multip_array.length ; i++) {
 var cross_per_turn = 0;
 
 
-
-function add(miner_id,buy_all) {
+function add(miner_id, buy_all) {
     if (miner_define[miner_id][2] <= courrent_counter_money && unlocks[miner_id]) {
         miner_define[miner_id][0] += 1;
         cross_per_turn += miner_define[miner_id][1];
@@ -94,13 +93,12 @@ function multip_add(change, cost, remo_id,id) {
         }
         
     }
-    
 }
 
 
 function check_array(array) {
     for (i = 0; i < array.length ; i++) {
-        if (array[i] == false) {
+        if (! array[i]) {
             return false;        
         }
     }
@@ -109,6 +107,7 @@ function check_array(array) {
 }
 
 
+// main loop for calculating the current amount of money
 setInterval(mine,100);
 function mine() {
     courrent_counter_money += cross_per_turn / 10;    
