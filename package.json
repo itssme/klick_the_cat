@@ -1,0 +1,9 @@
+{
+  "name": "klick_den_Schmuser",
+  "version": "0.0.1",
+  "description": "simple socket.io game",
+  "dependencies": {
+    "socket.io": "2.1.0",
+    "express": "4.16.3"
+  }
+}

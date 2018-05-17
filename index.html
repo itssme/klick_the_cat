@@ -11,27 +11,24 @@
         <script>
             // define all vars here
             var counter = 0;
-            var courrent_counter_money = 0;
+            var current_counter_money = 0;
             var miner_counter = 0;
             var multip = 1;
             var array_btc = Array(70);
-           
         </script>
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        
         <script type="text/javascript" src="js/functions.js"></script>
         
         <br>
         
     <center>
-        
         <div id="all">
         
         <fieldset id="main_fieldset" class="field_set">
             <legend>> <code>cross!</code> <</legend> 
             <span id="line" onmouseover="over_line()"><hr style="height: 25px; background-color: #000000; border-radius: 25px;"></span>
-        
         </fieldset>
     
         <br>
@@ -40,9 +37,6 @@
             <legend>Your Stats</legend>
             <code>Global counter <span id="user_counter">0</span></code> <br>
             <code>Corrent money <span id="user_money">0</span></code>
-            
-            
-            
         </fieldset>
         
         <fieldset class="field_set" style="width: 250px; position: relative; left: 190px; top: -72px;">
@@ -50,11 +44,7 @@
             <code>Global miner counter <span id="miner_counter">0</span></code> <br>
             <code>Miners <span id="miner_anz">0</span></code> <br>
             <code>Money per Sec. <span id="money_turn">0</span></code>
-            
-            
         </fieldset>
-        
-        
         
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <div id="chart_div" style="width: 900px; height: 200px;"></div>
@@ -73,7 +63,7 @@
                 }
 
 
-                array_btc[69] =  courrent_counter_money;
+                array_btc[69] =  current_counter_money;
                 let add_array = [];
 
                 for (let i = 0; i < array_btc.length; i++) {
@@ -112,53 +102,13 @@
             
             <fieldset class="field_set" style="width: 250px; left: 2px; position: absolute;">
                 <legend><code>Miners</code></legend>
-                
-                <span id="miner_0">
-                    <code>Cost 10  Cross 0.1</code> <br>
-                    <button onclick="add(0,false)" class="myButton" style="width: 200px; height: 25px;"><code>Cross bot</code></button>
-                </span>
-                
-                <hr>
-                
-                <span id="miner_1">
-                    <code>Cost 25  Cross 0.5</code> <br>
-                    <button onclick="add(1,false)" class="myButton" style="width: 200px; height: 25px;"><code>Crossomat</code></button>
-                </span>
-                
-                <hr>
-                
-                <span id="miner_2">
-                    <code>Cost 50  Cross 1</code> <br>
-                    <button onclick="add(2,false)" class="myButton" style="width: 200px; height: 25px;"><code>Crossomat 2.0</code></button>
-                </span>
-                
-                <hr>
-                
-                <span id="miner_3">
-                    <code>Cost 100  Cross 5</code> <br>
-                    <button onclick="add(3,false)" class="myButton" style="width: 200px; height: 25px;"><code>Crossing pro</code></button>
-                </span>
-                
-                <hr>
-                
-                <span id="miner_4">
-                    <code>Cost 500  Cross 25</code> <br>
-                    <button onclick="add(4,false)" class="myButton" style="width: 200px; height: 25px;"><code>Crossing ultra</code></button>
-                </span>
-                
-                <hr>
-                
-                <span id="miner_5">
-                    <code>Cost 1000  Cross 50</code> <br>
-                    <button onclick="add(5,false)" class="myButton" style="width: 200px; height: 25px;"><code>Crossing mega</code></button>
-                </span>
-                
-                
+
+                <div id="miners">
+
+                </div>
+
             </fieldset>
-            
-            
-            
-            
+
             <fieldset id="unlocks" class="field_set" style="width: 250px;">
                 <legend><code>Unlocks</code></legend>
                 
@@ -225,29 +175,18 @@
                     <code>Cost 15000  Cross x20</code> <br>
                     <button onclick="multip_add(20,15000,'multip_2',2)" class="myButton" style="width: 200px; height: 25px;"><code>Cross x20</code></button>
                 </span>
-                
             </fieldset>
-            
-            
-            
         </fieldset>
-        
         </div>
     </center>
-        
-        
-        
-        
-                
         <script>
-        
-        console.log("sa");
-        
-        
-        
+            var socket = io();
+            socket.on('config_miners', function(msg){
+                console.log('message: ' + msg);
+                initMiners(JSON.parse(msg));
+            });
         </script>
-        
-        
+
         <style>
             
             #main_fieldset {
