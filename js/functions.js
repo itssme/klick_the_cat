@@ -5,10 +5,7 @@
  */
 
 var blus_upgrades = [];
-
-var disk_space_upgrades = [];
-disk_space_upgrades.push([0, 10, 100]); // Mgnetband
-disk_space_upgrades.push([0, 50, 750, 25000]);
+var disk_upgrades = [];
 
 var unlocks = Array(6);
 
@@ -37,23 +34,38 @@ function initMiners(miner_json) {
             "style='width: 200px; height: 25px;'><code>" + blus_upgrades[i][5] + "</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
+
+        html = "<span id=\'unlock_" + i + "\'><code>Cost " + blus_upgrades[i][3] + "  " + blus_upgrades[i][5] + "" +
+            "</code><br><button onclick='unlock(" + i + "," + blus_upgrades[i][3] + ", \"unlock_" + i + "\")'" +
+            "class='myButton' style='width: 200px; height: 25px;'><code>Unlock</code></button>" + hr + "</span>";
+
+        document.getElementById('unlock_config').innerHTML += html;
     }
 }
 
 
+function initDiskspace(diskspace_json) {
+    console.log(diskspace_json.disks);
+    disk_upgrades = diskspace_json["disks"];
+
+    for (let i = 0; i < disk_upgrades.length; i++) {
+        // TODO
+    }
+}
+
 function add(miner_id, buy_all) {
     if (blus_upgrades[miner_id][2] <= current_counter_money && unlocks[miner_id]) {
         blus_upgrades[miner_id][0] += 1;
-        blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
-        document.getElementById("content_miner_" + miner_id).innerText = "Cost " + blus_upgrades[miner_id][2] +
-                                " Blus " + blus_upgrades[miner_id][1];
+
         cross_per_turn += blus_upgrades[miner_id][1];
         current_counter_money -= blus_upgrades[miner_id][2];
-        blus_upgrades[miner_id][2] *= 1.2;
+        blus_upgrades[miner_id][2] += Math.sqrt(blus_upgrades[miner_id][2]);
         
         current_counter_money = parseFloat(current_counter_money.toFixed(4));
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
-        
+        blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
+        document.getElementById("content_miner_" + miner_id).innerText = "Cost " + blus_upgrades[miner_id][2] +
+            " Blus " + blus_upgrades[miner_id][1];
         document.getElementById("money_turn").innerHTML = cross_per_turn;
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
         document.getElementById("user_money").innerHTML = current_counter_money;
@@ -84,9 +96,7 @@ function unlock(miner_id, cost, remo_id) {
         
         if (check_array(unlocks)) {
             document.getElementById("unlock_true").innerHTML = "Nothing to buy anymore";
-            
         }
-    
     }
 }
 
@@ -102,9 +112,7 @@ function multip_add(change, cost, remo_id,id) {
                 
         if (check_array(multip_array)) {
             document.getElementById("multip_true").innerHTML = "Nothing to buy anymore";
-            
         }
-        
     }
 }
 

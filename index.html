@@ -27,8 +27,8 @@
         <div id="all">
         
         <fieldset id="main_fieldset" class="field_set">
-            <legend>> <code>cross!</code> <</legend> 
-            <span id="line" onmouseover="over_line()"><hr style="height: 25px; background-color: #000000; border-radius: 25px;"></span>
+            <legend>> <code>click!</code> <</legend>
+            <img src="resources/schmuserkadser.png" onclick="over_line()" style="height: 300px">
         </fieldset>
     
         <br>
@@ -36,14 +36,14 @@
         <fieldset class="field_set" style="width: 250px; position: relative; left: -190px;">
             <legend>Your Stats</legend>
             <code>Global counter <span id="user_counter">0</span></code> <br>
-            <code>Corrent money <span id="user_money">0</span></code>
+            <code>Current Blus <span id="user_money">0</span></code>
         </fieldset>
         
         <fieldset class="field_set" style="width: 250px; position: relative; left: 190px; top: -72px;">
-            <legend>Miner Stats</legend>
-            <code>Global miner counter <span id="miner_counter">0</span></code> <br>
+            <legend>Blus Stats</legend>
+            <code>Global posts counter <span id="miner_counter">0</span></code> <br>
             <code>Miners <span id="miner_anz">0</span></code> <br>
-            <code>Money per Sec. <span id="money_turn">0</span></code>
+            <code>Blus per Sec. <span id="money_turn">0</span></code>
         </fieldset>
         
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -113,46 +113,19 @@
                 <legend><code>Unlocks</code></legend>
                 
                 <code><span id="unlock_true"></span></code>
-                
+
+                <div id="unlock_config">
+
+                </div>
+                <!--
                 <span id="unlock_0">
                     <code>Cost 100  Cross bot</code> <br>
                     <button onclick="unlock(0,100,'unlock_0')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
                 <hr>
                 </span>
-                
-                <span id="unlock_1">
-                    <code>Cost 250  Crossomat</code> <br>
-                    <button onclick="unlock(1,250,'unlock_1')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                    <hr>
-                </span>
-                
-                <span id="unlock_2">
-                    <code>Cost 500  Crossomat 2.0</code> <br>
-                    <button onclick="unlock(2,500,'unlock_2')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                    <hr>
-                </span>
-                
-                <span id="unlock_3">
-                    <code>Cost 2500  Crossing pro</code> <br>
-                    <button onclick="unlock(3,2500,'unlock_3')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                    <hr>
-                </span>
-                
-                <span id="unlock_4">
-                    <code>Cost 10000  Crossing ultra</code> <br>
-                    <button onclick="unlock(4,10000,'unlock_4')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                    <hr>
-                </span>
-                
-                <span id="unlock_5">
-                    <code>Cost 20000  Crossing ultra</code> <br>
-                    <button onclick="unlock(5,20000,'unlock_5')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                </span>
+                -->
                 
             </fieldset>
-            
-            
-            
             
             <fieldset class="field_set" style="width: 250px; position: absolute; left: 565px; top: 22px;">
                 <legend><code>Mutliplikatoren</code></legend>
@@ -185,6 +158,10 @@
                 console.log('message: ' + msg);
                 initMiners(JSON.parse(msg));
             });
+            socket.on('config_diskspace', function(msg) {
+                console.log('message: ' + msg);
+                initDiskspace(JSON.parse(msg));
+            })
         </script>
 
         <style>
