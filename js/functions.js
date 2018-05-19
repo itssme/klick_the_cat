@@ -21,6 +21,7 @@ for (i = 0; i < multip_array.length ; i++) {
 
 var cross_per_turn = 0;
 var total_disk_space = 0;
+var used_disk_space = 0;
 
 function initMiners(miner_json) {
     cross_per_turn = miner_json["cross_per_turn"];
@@ -65,13 +66,14 @@ function initDiskspace(diskspace_json) {
 }
 
 function add(miner_id, buy_all) {
-    if (blus_upgrades[miner_id][2] <= current_counter_money && unlocks[miner_id]) {
+    if (blus_upgrades[miner_id][2] <= current_counter_money && unlocks[miner_id] && blus_upgrades[miner_id][4] <=
+                                                                                    total_disk_space-used_disk_space) {
         blus_upgrades[miner_id][0] += 1;
 
         cross_per_turn += blus_upgrades[miner_id][1];
         current_counter_money -= blus_upgrades[miner_id][2];
 
-        x =blus_upgrades[miner_id][2];
+        x = blus_upgrades[miner_id][2];
         blus_upgrades[miner_id][2] += (Math.sin(x*0.1)*10+x)*0.1;
         current_counter_money = parseFloat(current_counter_money.toFixed(4));
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
@@ -166,6 +168,7 @@ function drawPie() {
 
     // TODO: do the same for the minus_upgrades
 
+    used_disk_space = sum;
     if (total_disk_space-sum > 0) {
         total_usage.push([total_disk_space - sum, "empty"]);
     }
