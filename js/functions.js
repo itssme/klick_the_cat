@@ -7,7 +7,7 @@
 var blus_upgrades = [];
 var disk_upgrades = [];
 
-var unlocks = Array(6);
+var unlocks = Array();
 
 for (i = 0; i < unlocks.length ; i++) {
     unlocks[i] = false;
@@ -22,8 +22,17 @@ for (i = 0; i < multip_array.length ; i++) {
 var cross_per_turn = 0;
 
 function initMiners(miner_json) {
+    cross_per_turn = miner_json["cross_per_turn"]
+    document.getElementById("money_turn").innerHTML = cross_per_turn;
     console.log(miner_json.miner);
     blus_upgrades = miner_json["miner"];
+
+    unlocks = Array(blus_upgrades.length);
+
+    for (i = 0; i < unlocks.length ; i++) {
+        unlocks[i] = false;
+    }
+
 
     for (let i = 0; i < blus_upgrades.length; i++) {
         hr = "";
@@ -59,8 +68,9 @@ function add(miner_id, buy_all) {
 
         cross_per_turn += blus_upgrades[miner_id][1];
         current_counter_money -= blus_upgrades[miner_id][2];
-        blus_upgrades[miner_id][2] += Math.sqrt(blus_upgrades[miner_id][2]);
-        
+
+        x =blus_upgrades[miner_id][2];
+        blus_upgrades[miner_id][2] += (Math.sin(x*0.1)*10+x)*0.1;
         current_counter_money = parseFloat(current_counter_money.toFixed(4));
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));

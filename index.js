@@ -30,6 +30,8 @@ diskspace_upgrades.push([0, 10, 50 ,100, '"Magnetband"']);
 diskspace_upgrades.push([0, 50, 750, 25000, '"Floppy-Disk"']);
 diskspace_upgrades.push([0, 200, 12000, 50000, '"USB-Stick"']);
 
+cross_per_turn = -1;
+
 blus_upgrades_str = config_array_to_string(blus_upgrades);
 diskspace_upgrades_str = config_array_to_string(diskspace_upgrades);
 
@@ -54,7 +56,7 @@ http.listen(3000, function(){
 
 io.on('connection', function(socket){
     console.log('a schmuser connected');
-    socket.emit('config_miners', '{"miner": ' + blus_upgrades_str + '}');
+    socket.emit('config_miners', '{"miner": ' + blus_upgrades_str + ', "cross_per_turn": ' + cross_per_turn + '}');
     socket.emit('config_diskspace', '{"disks": ' + diskspace_upgrades_str + '}');
 
     socket.on('disconnect', function(){

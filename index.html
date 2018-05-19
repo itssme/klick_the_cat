@@ -42,7 +42,7 @@
         <fieldset class="field_set" style="width: 250px; position: relative; left: 190px; top: -72px;">
             <legend>Blus Stats</legend>
             <code>Global posts counter <span id="miner_counter">0</span></code> <br>
-            <code>Miners <span id="miner_anz">0</span></code> <br>
+            <code>Actions <span id="miner_anz">0</span></code> <br>
             <code>Blus per Sec. <span id="money_turn">0</span></code>
         </fieldset>
         
@@ -101,9 +101,18 @@
             <legend>Buy stuff!</legend>
             
             <fieldset class="field_set" style="width: 250px; left: 2px; position: absolute;">
-                <legend><code>Miners</code></legend>
+                <legend><code>Actions</code></legend>
 
                 <div id="miners">
+
+                </div>
+
+            </fieldset>
+
+            <fieldset class="field_set" style="width: 250px; left: 2px; position: absolute;">
+                <legend><code>Minus</code></legend>
+
+                <div id="minus">
 
                 </div>
 
@@ -117,13 +126,6 @@
                 <div id="unlock_config">
 
                 </div>
-                <!--
-                <span id="unlock_0">
-                    <code>Cost 100  Cross bot</code> <br>
-                    <button onclick="unlock(0,100,'unlock_0')" class="myButton" style="width: 200px; height: 25px;"><code>Unlock</code></button>
-                <hr>
-                </span>
-                -->
                 
             </fieldset>
             
@@ -173,9 +175,7 @@
             }
             
             .field_set {
-                border-radius: 25px;                
-                
-                
+                border-radius: 25px;
             }
             
             #all {
