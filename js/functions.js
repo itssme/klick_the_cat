@@ -247,3 +247,13 @@ function hideAll() {
         elem.style.display = 'none';
     });
 }
+
+var socket = io();
+socket.on('config_miners', function(msg){
+    console.log('message: ' + msg);
+    initMiners(JSON.parse(msg));
+});
+socket.on('config_diskspace', function(msg) {
+    console.log('message: ' + msg);
+    initDiskspace(JSON.parse(msg));
+})
