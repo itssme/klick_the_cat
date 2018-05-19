@@ -20,6 +20,7 @@ for (i = 0; i < multip_array.length ; i++) {
 }
 
 var cross_per_turn = 0;
+var total_disk_space = 0;
 
 function initMiners(miner_json) {
     cross_per_turn = miner_json["cross_per_turn"];
@@ -54,6 +55,7 @@ function initMiners(miner_json) {
 
 
 function initDiskspace(diskspace_json) {
+    total_disk_space = diskspace_json["total_disk_space"];
     console.log(diskspace_json.disks);
     disk_upgrades = diskspace_json["disks"];
 
@@ -79,6 +81,7 @@ function add(miner_id, buy_all) {
         document.getElementById("money_turn").innerHTML = cross_per_turn;
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
         document.getElementById("user_money").innerHTML = current_counter_money;
+        drawPie();
     }
 }
 
@@ -133,7 +136,6 @@ function check_array(array) {
             return false;        
         }
     }
-        
     return true;
 }
 
@@ -149,18 +151,30 @@ function mine() {
     
     document.getElementById("miner_counter").innerHTML = miner_counter;
     document.getElementById("user_money").innerHTML = current_counter_money;
-    
-    
 }
 
 setInterval(drawPie, 2000);
 function drawPie() {
     dataPoints_array = [];
-    // TODO: calculate percentage of user diskpace
+    total_usage = [];
 
+    sum = 0;
+    for (let i = 0; i < blus_upgrades.length; i++) {
+        total_usage.push([blus_upgrades[i][0] * blus_upgrades[i][4], blus_upgrades[i][5]]);
+        sum += blus_upgrades[i][0];
+    }
+
+    // TODO: do the same for the minus_upgrades
+
+    if (total_disk_space-sum > 0) {
+        total_usage.push([total_disk_space - sum, "empty"]);
+    }
+    for (let i = 0; i < total_usage.length; i++) {
+        dataPoints_array.push({y: (total_usage[i][0]/total_disk_space)*100, label: total_usage[i][1]})
+    }
 
     var chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,
+        animationEnabled: false,
         title: {
             text: "Diskspace usage"
         },
@@ -170,10 +184,49 @@ function drawPie() {
             yValueFormatString: "##0.00\"%\"",
             indexLabel: "{label} {y}",
             dataPoints: dataPoints_array
-
         }]
     });
     chart.render();
+}
+
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawBasic);
+
+setInterval(drawBasic, 2000);
+function drawBasic() {
+
+
+    for (var i = 0; i <= 69; i++) {
+        array_btc[i] = array_btc[i+1];
+    }
+
+
+    array_btc[69] =  current_counter_money;
+    let add_array = [];
+
+    for (let i = 0; i < array_btc.length; i++) {
+        add_array.push([i, array_btc[i]])
+    }
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'X');
+    data.addColumn('number', '');
+
+    data.addRows(add_array);
+
+    var options = {
+        hAxis: {
+            title: 'Time'
+        },
+        vAxis: {
+            title: 'Blus'
+        }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+
 }
 
 function setActive( area ) {

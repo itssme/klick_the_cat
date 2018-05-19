@@ -18,6 +18,7 @@
         </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
     <body>
         <script type="text/javascript" src="js/functions.js"></script>
@@ -46,51 +47,9 @@
             <code>Blus per Sec. <span id="money_turn">0</span></code>
         </fieldset>
         
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <div id="chart_div" style="grid-row: 7 / span 1; grid-column: 2 /span 2;"></div>
+        <div id="chart_div" style="grid-row: 7 / span 1; grid-column: 2 /span 2;"></div>
 
-            <script>
-            google.charts.load('current', {packages: ['corechart', 'line']});
-            google.charts.setOnLoadCallback(drawBasic);
-
-
-            setInterval(drawBasic, 2000); 
-            function drawBasic() {
-
-
-                for (var i = 0; i <= 69; i++) {
-                    array_btc[i] = array_btc[i+1];
-                }
-
-
-                array_btc[69] =  current_counter_money;
-                let add_array = [];
-
-                for (let i = 0; i < array_btc.length; i++) {
-                    add_array.push([i, array_btc[i]])
-                } 
-
-                var data = new google.visualization.DataTable();
-                data.addColumn('number', 'X');
-                data.addColumn('number', '');
-
-                data.addRows(add_array);
-
-                var options = {
-                  hAxis: {
-                    title: 'Time'
-                  },
-                  vAxis: {
-                    title: 'Blus'
-                  }
-                };
-
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-                chart.draw(data, options);
-
-          }
-        </script>
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
         
         <fieldset class="Upgrades">
             <legend>Buy stuff!</legend>
@@ -119,7 +78,7 @@
             <fieldset id="Minus" class="field_set banner" style="display: none;">
                 <legend><code>Minus</code></legend>
 
-                <div id="minus">
+                <div id="minus_upgrade">
 
                 </div>
 

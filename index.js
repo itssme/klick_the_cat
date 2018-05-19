@@ -33,16 +33,14 @@ diskspace_upgrades.push([0, 200, 12000, 50000, '"USB-Stick"']);
 var minus_upgrades = [];
 // 0 number of bought items, minus per turn, cost, cost for unlock, disk space usage, name
 minus_upgrades.push([0, 1, 500, 15000, 15, '"Hate Comment"']);
-minus_upgrades.push([0, 15, 7500, 42500, 50, '"Hate Comment"']);
+minus_upgrades.push([0, 15, 7500, 42500, 50, '"Downvote Spam"']);
 
 cross_per_turn = -1;
+total_disk_space = 10;
 
 blus_upgrades_str = config_array_to_string(blus_upgrades);
 diskspace_upgrades_str = config_array_to_string(diskspace_upgrades);
 minus_upgrades_str = config_array_to_string(minus_upgrades);
-
-console.log(blus_upgrades_str);
-console.log(diskspace_upgrades_str);
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
@@ -63,7 +61,7 @@ http.listen(3000, function(){
 io.on('connection', function(socket){
     console.log('a schmuser connected');
     socket.emit('config_miners', '{"miner": ' + blus_upgrades_str + ', "cross_per_turn": ' + cross_per_turn + '}');
-    socket.emit('config_diskspace', '{"disks": ' + diskspace_upgrades_str + '}');
+    socket.emit('config_diskspace', '{"disks": ' + diskspace_upgrades_str + ', "total_disk_space": ' + total_disk_space + '}');
     socket.emit('config_minus', '{"minus": ' + minus_upgrades_str + '}');
 
     socket.on('disconnect', function(){
