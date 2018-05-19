@@ -22,7 +22,7 @@ for (i = 0; i < multip_array.length ; i++) {
 var cross_per_turn = 0;
 
 function initMiners(miner_json) {
-    cross_per_turn = miner_json["cross_per_turn"]
+    cross_per_turn = miner_json["cross_per_turn"];
     document.getElementById("money_turn").innerHTML = cross_per_turn;
     console.log(miner_json.miner);
     blus_upgrades = miner_json["miner"];
@@ -151,4 +151,20 @@ function mine() {
     document.getElementById("user_money").innerHTML = current_counter_money;
     
     
+}
+
+function setActive( area ) {
+    var x = document.getElementById(area);
+    if (x.style.display === "none") {
+        hideAll();
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+function hideAll() {
+    document.querySelectorAll('.banner').forEach(function (elem) {
+        elem.style.display = 'none';
+    });
 }
