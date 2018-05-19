@@ -153,6 +153,29 @@ function mine() {
     
 }
 
+setInterval(drawPie, 2000);
+function drawPie() {
+    dataPoints_array = [];
+    // TODO: calculate percentage of user diskpace
+
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        title: {
+            text: "Diskspace usage"
+        },
+        data: [{
+            type: "pie",
+            startAngle: 240,
+            yValueFormatString: "##0.00\"%\"",
+            indexLabel: "{label} {y}",
+            dataPoints: dataPoints_array
+
+        }]
+    });
+    chart.render();
+}
+
 function setActive( area ) {
     var x = document.getElementById(area);
     if (x.style.display === "none") {
