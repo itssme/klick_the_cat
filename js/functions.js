@@ -66,7 +66,7 @@ function initDiskspace(diskspace_json) {
     unlocks_disk = Array(disk_upgrades.length);
 
     for (let i = 0; i < disk_upgrades.length; i++) {
-        unlocks_disk[i] = true; // set true for testing
+        unlocks_disk[i] = true; // set true for testing and until storage unlocks are not implemented
 
         hr = "";
         if (i < disk_upgrades.length - 1) {hr = "<hr>"}
@@ -99,7 +99,7 @@ function addDiskSpace(disk_id, buy_all) {
 function getUsedDiskSpace() {
     sum = 0;
     for (let i = 0; i < blus_upgrades.length; i++) {
-        sum += blus_upgrades[i][0];
+        sum += blus_upgrades[i][0] * blus_upgrades[i][4];
     }
 
     // TODO: do the same for the minus_upgrades
@@ -129,7 +129,7 @@ function add(miner_id, buy_all) {
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
         document.getElementById("content_miner_" + miner_id).innerText = "Cost " + blus_upgrades[miner_id][2] +
-            " Blus " + blus_upgrades[miner_id][1];
+            " Blus " + blus_upgrades[miner_id][1] + " Disk Space -" + formatBytes(blus_upgrades[miner_id][4]);
         document.getElementById("money_turn").innerHTML = cross_per_turn;
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
         document.getElementById("user_money").innerHTML = current_counter_money;
