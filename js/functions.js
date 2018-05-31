@@ -7,11 +7,14 @@
 var blus_upgrades = [];
 var disk_upgrades = [];
 
-var unlocks = Array();
+var counter = 0;
+var current_counter_money = 0;
+var miner_counter = 0;
+var multip = 1;
+var array_btc = Array(70);
 
-for (i = 0; i < unlocks.length ; i++) {
-    unlocks[i] = false;
-}
+var unlocks = Array();
+var unlocks_disk = Array(0);
 
 var multip_array = Array(3);
 
@@ -23,6 +26,7 @@ var cross_per_turn = 0;
 var total_disk_space = 0;
 var used_disk_space = 0;
 
+
 function initMiners(miner_json) {
     cross_per_turn = miner_json["cross_per_turn"];
     document.getElementById("money_turn").innerHTML = cross_per_turn;
@@ -31,17 +35,13 @@ function initMiners(miner_json) {
 
     unlocks = Array(blus_upgrades.length);
 
-    for (i = 0; i < unlocks.length ; i++) {
-        unlocks[i] = false;
-    }
-
-
     for (let i = 0; i < blus_upgrades.length; i++) {
+        unlocks[i] = false;
         hr = "";
         if (i < blus_upgrades.length - 1) {hr = "<hr>"}
 
         html = "<span id='miner_" + i +"'><code id='content_miner_" + i +"'>Cost " + blus_upgrades[i][2]
-            +"  Blus " + blus_upgrades[i][1] +"</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
+            +"  Blus " + blus_upgrades[i][1] + " Disk Space -"  + formatBytes(blus_upgrades[i][4]) + "</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
             "style='width: 200px; height: 25px;'><code>" + blus_upgrades[i][5] + "</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
@@ -60,10 +60,60 @@ function initDiskspace(diskspace_json) {
     console.log(diskspace_json.disks);
     disk_upgrades = diskspace_json["disks"];
 
+    document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
+    document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
+
+    unlocks_disk = Array(disk_upgrades.length);
+
     for (let i = 0; i < disk_upgrades.length; i++) {
-        // TODO
+        unlocks_disk[i] = true; // set true for testing
+
+        hr = "";
+        if (i < disk_upgrades.length - 1) {hr = "<hr>"}
+
+        html = "<span id='disk_" + i +"'><code id='content_disk_" + i +"'>Cost " + disk_upgrades[i][2]
+            +"  Storage Space " + disk_upgrades[i][1] +"KB</code><br><button onclick='addDiskSpace(" + i + ",false)' class='myButton'" +
+            "style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button>" + hr + "</span>";
+
+        document.getElementById('disks').innerHTML += html;
+    }
+
+    drawPie();
+}
+
+
+function addDiskSpace(disk_id, buy_all) {
+    if (disk_upgrades[disk_id][2] <= current_counter_money && unlocks_disk[disk_id]) {
+        disk_upgrades[disk_id][0] += 1;
+
+        total_disk_space += disk_upgrades[disk_id][1];
+        current_counter_money -= disk_upgrades[disk_id][2];
+
+        document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
+        document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
+
+        drawPie();
     }
 }
+
+function getUsedDiskSpace() {
+    sum = 0;
+    for (let i = 0; i < blus_upgrades.length; i++) {
+        sum += blus_upgrades[i][0];
+    }
+
+    // TODO: do the same for the minus_upgrades
+    return sum;
+}
+
+function formatBytes(kbytes) {
+    bytes = kbytes * 1024;
+    if(bytes < 1024) return bytes + " Bytes";
+    else if(bytes < 1048576) return(bytes / 1024).toFixed(2) + " KB";
+    else if(bytes < 1073741824) return(bytes / 1048576).toFixed(2) + " MB";
+    else return(bytes / 1073741824).toFixed(2) + " GB";
+}
+
 
 function add(miner_id, buy_all) {
     if (blus_upgrades[miner_id][2] <= current_counter_money && unlocks[miner_id] && blus_upgrades[miner_id][4] <=
@@ -74,7 +124,7 @@ function add(miner_id, buy_all) {
         current_counter_money -= blus_upgrades[miner_id][2];
 
         x = blus_upgrades[miner_id][2];
-        blus_upgrades[miner_id][2] += (Math.sin(x*0.1)*10+x)*0.1;
+        blus_upgrades[miner_id][2] += (Math.sin(x*0.01)*200+x)/100;
         current_counter_money = parseFloat(current_counter_money.toFixed(4));
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
@@ -83,13 +133,15 @@ function add(miner_id, buy_all) {
         document.getElementById("money_turn").innerHTML = cross_per_turn;
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
         document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
+        document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
         drawPie();
     }
 }
 
 
 function over_line() {
-    counter += (1 * multip) ;
+    counter += multip ;
     current_counter_money += 1;
     
     current_counter_money = parseFloat(current_counter_money.toFixed(4));
@@ -160,15 +212,13 @@ function drawPie() {
     dataPoints_array = [];
     total_usage = [];
 
-    sum = 0;
     for (let i = 0; i < blus_upgrades.length; i++) {
         total_usage.push([blus_upgrades[i][0] * blus_upgrades[i][4], blus_upgrades[i][5]]);
-        sum += blus_upgrades[i][0];
     }
 
-    // TODO: do the same for the minus_upgrades
-
+    sum = getUsedDiskSpace();
     used_disk_space = sum;
+
     if (total_disk_space-sum > 0) {
         total_usage.push([total_disk_space - sum, "empty"]);
     }

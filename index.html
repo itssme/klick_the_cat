@@ -8,14 +8,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Klick den Schmuser!</title>
-        <script>
-            // define all vars here
-            var counter = 0;
-            var current_counter_money = 0;
-            var miner_counter = 0;
-            var multip = 1;
-            var array_btc = Array(70);
-        </script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -37,7 +29,9 @@
         <fieldset class="field_set" style="grid-row: 6 / span 1; grid-column: 2;">
             <legend>Your Stats</legend>
             <code>Global counter <span id="user_counter">0</span></code> <br>
-            <code>Current Blus <span id="user_money">0</span></code>
+            <code>Current Blus <span id="user_money">0</span></code> <br>
+            <code>Total Disk Space <span id="total_disk_space"></span></code> <br>
+            <code>Available Disk Space <span id="available_disk_space"></span></code>
         </fieldset>
         
         <fieldset class="field_set" style="grid-row: 6 / span 1; grid-column: 3;">
@@ -72,6 +66,9 @@
             <fieldset id="Storage" class="field_set banner" style="display: none;">
                 <legend><code>Storage</code></legend>
 
+                <div id="disks">
+
+                </div>
 
             </fieldset>
 
@@ -200,11 +197,6 @@
                 position:relative;
                 top:1px;
             }
-            
-            
         </style>
-        
-        
-        
     </body>
 </html>

@@ -20,12 +20,12 @@ function config_array_to_string(config_array) {
 var blus_upgrades = [];
 // 0 number of bought items, blus per turn, cost, cost for unlock, disk space usage, name
 blus_upgrades.push([0, 0.1, 20, 100, 1, '"Tag"']);
-blus_upgrades.push([0, 1, 50, 500, 50, '"Comment"']);
+blus_upgrades.push([0, 1, 50, 500, 15, '"Comment"']);
 blus_upgrades.push([0, 15, 200, 5000, 20, '"Funny Comment"']);
 blus_upgrades.push([0, 100, 5000, 30000, 30, '"Top Comment"']);
 
 var diskspace_upgrades = [];
-// number of bought items, disk space (in kb), cost,unlock cost, name
+// number of bought items, disk space (in kb), cost, unlock cost, name
 diskspace_upgrades.push([0, 10, 50 ,100, '"Magnetband"']);
 diskspace_upgrades.push([0, 50, 750, 25000, '"Floppy-Disk"']);
 diskspace_upgrades.push([0, 200, 12000, 50000, '"USB-Stick"']);
