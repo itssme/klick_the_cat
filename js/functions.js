@@ -311,11 +311,10 @@ function initServer() {
         initDiskspace(JSON.parse(msg));
     })
 }
-
-var person = prompt("Please enter your name:", "John Doe");
-if (person == null || person == "") {
+var person;
+while (person == null || person == "") {
     alert("Ungültiger Name!");
-} else {
-    initServer();
+    person = prompt("Please enter your name:", "John Doe");
 }
+initServer();
 
