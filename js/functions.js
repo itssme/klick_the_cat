@@ -8,6 +8,7 @@ var socket;
 
 var blus_upgrades = [];
 var disk_upgrades = [];
+var users = [];
 
 var counter = 0;
 var current_counter_money = 0;
@@ -311,6 +312,37 @@ function initServer() {
         initDiskspace(JSON.parse(msg));
     });
     socket.emit('username', '{"username": "' + username + '"}');
+}
+
+function compare(a,b) {
+    if (a.blus < b.blus)
+        return -1;
+    if (a.blus > b.blus)
+        return 1;
+    return 0;
+}
+
+function updateLeaderboard() {
+    var leaderboard = document.getElementById("leaderList");
+    users.sort(compare);
+    leaderboard.innerHTML = "";
+    users.forEach(function (user) {
+        var node = document.createElement("LI");                 // Create a <li> node
+        var textnode = document.createTextNode(user.name + ": " + user.blus + "Blus");         // Create a text node
+        node.appendChild(textnode);                              // Append the text to <li>
+        leaderboard.appendChild(node);     // Append <li> to <ul> with id="leaderboard"
+    });
+}
+
+function updateUsers(user_id, username, blus) {
+    users.forEach(function(user) {
+        if (user.id == user_id) {
+            user.blus = blus;
+        }
+    });
+    if(users.filter(function (user) { return user.id == user_id; }).length == 0) {
+        users.push({"id": user_id, "name": username, "blus": blus});
+    }
 }
 
 var username = "";
