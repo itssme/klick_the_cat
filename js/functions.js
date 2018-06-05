@@ -309,12 +309,14 @@ function initServer() {
     socket.on('config_diskspace', function(msg) {
         console.log('message: ' + msg);
         initDiskspace(JSON.parse(msg));
-    })
+    });
+    socket.emit('username', '{"username": "' + username + '"}');
 }
-var person;
-while (person == null || person == "") {
+
+var username = "";
+username = prompt("Please enter your name:", "John Doe");
+while (username == null || username == "") {
     alert("Ungültiger Name!");
-    person = prompt("Please enter your name:", "John Doe");
+    username = prompt("Please enter your name:", "John Doe");
 }
 initServer();
-

@@ -58,13 +58,22 @@ http.listen(3000, function(){
     console.log('listening on *:3000');
 });
 
+var user_id_counter = 0;
 io.on('connection', function(socket){
+    let username = "";
+    user_id_counter += 1;
+    let user_id = user_id_counter
     console.log('a schmuser connected');
     socket.emit('config_miners', '{"miner": ' + blus_upgrades_str + ', "cross_per_turn": ' + cross_per_turn + '}');
     socket.emit('config_diskspace', '{"disks": ' + diskspace_upgrades_str + ', "total_disk_space": ' + total_disk_space + '}');
     socket.emit('config_minus', '{"minus": ' + minus_upgrades_str + '}');
 
-    socket.on('disconnect', function(){
-        console.log('schmuser disconnected');
+    socket.on('username', function (msg) {
+        username = JSON.parse(msg)["username"];
+        console.log("user " + user_id_counter + " set name: " + username);
+    });
+
+    socket.on('disconnect', function() {
+        console.log("Username: " + username + " ID: " + user_id + " disconnected");
     });
 });
