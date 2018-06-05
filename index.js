@@ -58,22 +58,35 @@ http.listen(3000, function(){
     console.log('listening on *:3000');
 });
 
+var users = Array();
 var user_id_counter = 0;
 io.on('connection', function(socket){
     let username = "";
     user_id_counter += 1;
     let user_id = user_id_counter
-    console.log('a schmuser connected');
+    console.log('a schmuser connected with id: ' + user_id);
     socket.emit('config_miners', '{"miner": ' + blus_upgrades_str + ', "cross_per_turn": ' + cross_per_turn + '}');
     socket.emit('config_diskspace', '{"disks": ' + diskspace_upgrades_str + ', "total_disk_space": ' + total_disk_space + '}');
     socket.emit('config_minus', '{"minus": ' + minus_upgrades_str + '}');
 
     socket.on('username', function (msg) {
         username = JSON.parse(msg)["username"];
-        console.log("user " + user_id_counter + " set name: " + username);
+        users.push({"id": user_id, "username": username, "blus": 0})
+        console.log("user id: " + user_id_counter + " set name: " + username);
+        socket.emit('user_id', '{"user_id": "' + user_id + '"}');
     });
 
     socket.on('disconnect', function() {
         console.log("Username: " + username + " ID: " + user_id + " disconnected");
     });
+
+    socket.on('sync', function (msg) {
+        user_update = JSON.parse(msg)
+        users.forEach(function (user) {
+            if (user.id == user_update["id"]) {
+                user.blus = user_update["blus"];
+            }
+        });
+        socket.emit('user_update', JSON.stringify(users));
+    })
 });

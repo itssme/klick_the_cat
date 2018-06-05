@@ -303,22 +303,42 @@ function hideAll() {
 
 function initServer() {
     socket = io();
+
     socket.on('config_miners', function(msg){
         console.log('message: ' + msg);
         initMiners(JSON.parse(msg));
     });
+
     socket.on('config_diskspace', function(msg) {
         console.log('message: ' + msg);
         initDiskspace(JSON.parse(msg));
     });
+
     socket.emit('username', '{"username": "' + username + '"}');
+
+    socket.on('user_id', function (msg) {
+        user_id = JSON.parse(msg)["user_id"];
+        users.push({"id": user_id, "name": username, "blus": current_counter_money});
+    });
+    
+    socket.on('user_update', function (msg) {
+        users_sync = JSON.parse(msg);
+        users_sync.forEach(function (user) {
+            updateUsers(user.id, user.username, user.blus);
+        });
+    })
+}
+
+setInterval(get_users, 200);
+function get_users() {
+    socket.emit('sync', '{"id": "' + user_id + '", "username": "' + username + '", "blus": "' + current_counter_money + '"}');
 }
 
 function compare(a,b) {
     if (a.blus < b.blus)
-        return -1;
-    if (a.blus > b.blus)
         return 1;
+    if (a.blus > b.blus)
+        return -1;
     return 0;
 }
 
@@ -334,17 +354,19 @@ function updateLeaderboard() {
     });
 }
 
-function updateUsers(user_id, username, blus) {
+function updateUsers(id, username, blus) {
     users.forEach(function(user) {
-        if (user.id == user_id) {
+        if (user.id == id) {
             user.blus = blus;
         }
     });
-    if(users.filter(function (user) { return user.id == user_id; }).length == 0) {
-        users.push({"id": user_id, "name": username, "blus": blus});
+    if(users.filter(function (user) { return user.id == id; }).length == 0) {
+        users.push({"id": id, "name": username, "blus": blus});
     }
+    updateLeaderboard();
 }
 
+var user_id = -1;
 var username = "";
 username = prompt("Please enter your name:", "John Doe");
 while (username == null || username == "") {
