@@ -4,6 +4,8 @@
  *   Provides all functions and calculations for the game
  */
 
+var socket;
+
 var blus_upgrades = [];
 var disk_upgrades = [];
 
@@ -298,12 +300,22 @@ function hideAll() {
     });
 }
 
-var socket = io();
-socket.on('config_miners', function(msg){
-    console.log('message: ' + msg);
-    initMiners(JSON.parse(msg));
-});
-socket.on('config_diskspace', function(msg) {
-    console.log('message: ' + msg);
-    initDiskspace(JSON.parse(msg));
-})
+function initServer() {
+    socket = io();
+    socket.on('config_miners', function(msg){
+        console.log('message: ' + msg);
+        initMiners(JSON.parse(msg));
+    });
+    socket.on('config_diskspace', function(msg) {
+        console.log('message: ' + msg);
+        initDiskspace(JSON.parse(msg));
+    })
+}
+
+var person = prompt("Please enter your name:", "John Doe");
+if (person == null || person == "") {
+    alert("Ungültiger Name!");
+} else {
+    initServer();
+}
+
