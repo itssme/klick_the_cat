@@ -6,8 +6,9 @@
 
 var socket;
 
-var blus_upgrades = [];
-var disk_upgrades = [];
+var blus_upgrades  = [];
+var disk_upgrades  = [];
+var minus_upgrades = [];
 var users = [];
 
 var counter = 0;
@@ -101,6 +102,17 @@ function initMinus(minus_json) {
             "style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][4] + "</code></button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
+    }
+}
+
+
+function sendMinus(minus_id, buy_all) {
+    if (minus_upgrades[minus_id][2] <= current_counter_money && unlocks_minus[minus_id]) {
+        console.log("send minus");
+        user_selection = document.getElementById("minus_name_selection");
+        user_selection = user_selection.options[user_selection.selectedIndex].value;
+
+        socket.emit('send_minus', '{"user_id":"' + user_selection + '", "minus_id":"' + minus_id + '"}');
     }
 }
 
@@ -352,7 +364,12 @@ function initServer() {
         users_sync.forEach(function (user) {
             updateUsers(user.id, user.username, user.blus);
         });
-    })
+    });
+    
+    socket.on('got_minus', function (msg) {
+        minus = JSON.parse(msg);
+        cross_per_turn -= minus["minus"];
+    });
 }
 
 setInterval(get_users, 200);

@@ -59,6 +59,7 @@ http.listen(3000, function(){
 });
 
 var users = Array();
+var users_sockets = Array();
 var user_id_counter = 0;
 io.on('connection', function(socket){
     let username = "";
@@ -72,6 +73,7 @@ io.on('connection', function(socket){
     socket.on('username', function (msg) {
         username = JSON.parse(msg)["username"];
         users.push({"id": user_id, "username": username, "blus": 0})
+        users_sockets.push({"id": user_id, "socket": socket});
         console.log("user id: " + user_id_counter + " set name: " + username);
         socket.emit('user_id', '{"user_id": "' + user_id + '"}');
     });
@@ -88,5 +90,15 @@ io.on('connection', function(socket){
             }
         });
         socket.emit('user_update', JSON.stringify(users));
-    })
+    });
+
+    socket.on('send_minus', function (msg) {
+        sent_minus = JSON.parse(msg);
+        minus = minus_upgrades[sent_minus["minus_id"]][1];
+        users_sockets.forEach(function (user) {
+            if (user.id == sent_minus["user_id"]) {
+                user.socket.emit('got_minus', '{"minus":"' + minus + '"}');
+            }
+        });
+    });
 });
