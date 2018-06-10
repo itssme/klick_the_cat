@@ -335,9 +335,9 @@ function get_users() {
 }
 
 function compare(a,b) {
-    if (a.blus < b.blus)
+    if (parseInt(a.blus) < parseInt(b.blus))
         return 1;
-    if (a.blus > b.blus)
+    if (parseInt(a.blus) > parseInt(b.blus))
         return -1;
     return 0;
 }
@@ -346,11 +346,13 @@ function updateLeaderboard() {
     var leaderboard = document.getElementById("leaderList");
     users.sort(compare);
     leaderboard.innerHTML = "";
+    var i = 1;
     users.forEach(function (user) {
-        var node = document.createElement("LI");                 // Create a <li> node
-        var textnode = document.createTextNode(user.name + ": " + user.blus + "Blus");         // Create a text node
-        node.appendChild(textnode);                              // Append the text to <li>
-        leaderboard.appendChild(node);     // Append <li> to <ul> with id="leaderboard"
+        var newRow   = leaderboard.insertRow(leaderboard.rows.length);
+        newRow.insertCell(0).appendChild(document.createTextNode(i + "."));
+        newRow.insertCell(1).appendChild(document.createTextNode(user.name));
+        newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " Blus"));
+        i++;
     });
 }
 
@@ -366,11 +368,20 @@ function updateUsers(id, username, blus) {
     updateLeaderboard();
 }
 
+function deleteUser(id) {
+    users = users.filter(function (user) { return user.id != id });
+    updateLeaderboard();
+}
+
 var user_id = -1;
 var username = "";
 username = prompt("Please enter your name:", "John Doe");
-while (username == null || username == "") {
-    alert("Ungültiger Name!");
+while (username == null || username == "" || username.length > 15) {
+    if (username.length > 15) {
+        alert("Der Name darf höchstens 15 Zeichen lang sein!");
+    }else{
+        alert("Ungültiger Name!");
+    }
     username = prompt("Please enter your name:", "John Doe");
 }
 initServer();

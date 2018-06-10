@@ -17,9 +17,11 @@
         <div class="content">
             <fieldset class="field_set leaderboard">
                 <legend>Leaderboard</legend>
-                <ol id="leaderList">
+                <table id="leaderList" class="table">
+                    <tbody>
 
-                </ol>
+                    </tbody>
+                </table>
             </fieldset>
 
         
@@ -96,25 +98,25 @@
             </fieldset>
             
             <fieldset id="multipliers" class="field_set banner" style="display: none;">
-                <legend><code>Mutliplikatoren</code></legend>
+                <legend><code>Multiplikatoren</code></legend>
                 
                 <code><span id="multip_true"></span></code>                
                 
                 <span id="multip_0">
-                    <code>Cost 250  Cross x1.2</code> <br>
-                    <button onclick="multip_add(1.2,250,'multip_0',0)" class="myButton" style="width: 200px; height: 25px;"><code>Cross x1.2</code></button>
+                    <code>Cost 250  Click x1.2</code> <br>
+                    <button onclick="multip_add(1.2,250,'multip_0',0)" class="myButton" style="width: 200px; height: 25px;"><code>Click x1.2</code></button>
                     <hr>
                 </span>
                 
                 <span id="multip_1">
-                    <code>Cost 5000  Cross x2</code> <br>
-                    <button onclick="multip_add(2,5000,'multip_1',1)" class="myButton" style="width: 200px; height: 25px;"><code>Cross x2</code></button>
+                    <code>Cost 5000  Click x2</code> <br>
+                    <button onclick="multip_add(2,5000,'multip_1',1)" class="myButton" style="width: 200px; height: 25px;"><code>Click x2</code></button>
                     <hr>
                 </span>
                 
                 <span id="multip_2">
-                    <code>Cost 15000  Cross x20</code> <br>
-                    <button onclick="multip_add(20,15000,'multip_2',2)" class="myButton" style="width: 200px; height: 25px;"><code>Cross x20</code></button>
+                    <code>Cost 15000  Click x20</code> <br>
+                    <button onclick="multip_add(20,15000,'multip_2',2)" class="myButton" style="width: 200px; height: 25px;"><code>Click x20</code></button>
                 </span>
             </fieldset>
         </fieldset>
@@ -160,6 +162,7 @@
                 border-radius: 25px;
             }
 
+
             .myButton {
                 -moz-box-shadow:inset 4px -8px 0px -5px #ffffff;
                 -webkit-box-shadow:inset 4px -8px 0px -5px #ffffff;
@@ -199,6 +202,10 @@
             .myButton:active {
                 position:relative;
                 top:1px;
+            }
+
+            #leaderList{
+                overflow: auto;
             }
         </style>
     </body>
