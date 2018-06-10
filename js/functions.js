@@ -17,7 +17,8 @@ var multip = 1;
 var array_btc = Array(70);
 
 var unlocks = Array();
-var unlocks_disk = Array(0);
+var unlocks_disk = Array();
+var unlocks_minus = Array();
 
 var multip_array = Array(3);
 
@@ -84,6 +85,25 @@ function initDiskspace(diskspace_json) {
     drawPie();
 }
 
+function initMinus(minus_json) {
+    minus_upgrades = minus_json["minus"];
+
+    unlocks_minus = Array(minus_upgrades.length)
+
+    for (let i = 0; i < minus_upgrades.length; i++) {
+        unlocks_minus[i] = true; // set true for testing and until minus unlocks are not implemented
+
+        hr = "";
+        if (i < minus_upgrades.length - 1) {hr = "<hr>"}
+
+        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'>Cost " + minus_upgrades[i][2]
+            +"  Minus -" + minus_upgrades[i][1] +"B/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
+            "style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][4] + "</code></button>" + hr + "</span>";
+
+        document.getElementById('minus_upgrade').innerHTML += html;
+    }
+}
+
 
 function addDiskSpace(disk_id, buy_all) {
     if (disk_upgrades[disk_id][2] <= current_counter_money && unlocks_disk[disk_id]) {
@@ -99,6 +119,7 @@ function addDiskSpace(disk_id, buy_all) {
     }
 }
 
+
 function getUsedDiskSpace() {
     sum = 0;
     for (let i = 0; i < blus_upgrades.length; i++) {
@@ -108,6 +129,7 @@ function getUsedDiskSpace() {
     // TODO: do the same for the minus_upgrades
     return sum;
 }
+
 
 function formatBytes(kbytes) {
     bytes = kbytes * 1024;
@@ -282,7 +304,6 @@ function drawBasic() {
     var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 
     chart.draw(data, options);
-
 }
 
 function setActive( area ) {
@@ -314,11 +335,16 @@ function initServer() {
         initDiskspace(JSON.parse(msg));
     });
 
+    socket.on('config_minus', function(msg) {
+        console.log('message: ' + msg);
+        initMinus(JSON.parse(msg));
+    });
+
     socket.emit('username', '{"username": "' + username + '"}');
 
     socket.on('user_id', function (msg) {
         user_id = JSON.parse(msg)["user_id"];
-        users.push({"id": user_id, "name": username, "blus": current_counter_money});
+        users.push({"id": user_id, "name": username, "blus": cross_per_turn});
     });
     
     socket.on('user_update', function (msg) {
@@ -331,7 +357,7 @@ function initServer() {
 
 setInterval(get_users, 200);
 function get_users() {
-    socket.emit('sync', '{"id": "' + user_id + '", "username": "' + username + '", "blus": "' + current_counter_money + '"}');
+    socket.emit('sync', '{"id": "' + user_id + '", "username": "' + username + '", "blus": "' + cross_per_turn + '"}');
 }
 
 function compare(a,b) {
@@ -351,7 +377,7 @@ function updateLeaderboard() {
         var newRow   = leaderboard.insertRow(leaderboard.rows.length);
         newRow.insertCell(0).appendChild(document.createTextNode(i + "."));
         newRow.insertCell(1).appendChild(document.createTextNode(user.name));
-        newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " Blus"));
+        newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " B/s"));
         i++;
     });
 }
@@ -364,6 +390,8 @@ function updateUsers(id, username, blus) {
     });
     if(users.filter(function (user) { return user.id == id; }).length == 0) {
         users.push({"id": id, "name": username, "blus": blus});
+        html = '<option value="' + id + '">' + username + '</option>';
+        document.getElementById("minus_name_selection").innerHTML += html;
     }
     updateLeaderboard();
 }
@@ -375,13 +403,13 @@ function deleteUser(id) {
 
 var user_id = -1;
 var username = "";
-username = prompt("Please enter your name:", "John Doe");
+username = prompt("Please enter your name:", "Schmuserkadser");
 while (username == null || username == "" || username.length > 15) {
     if (username.length > 15) {
         alert("Der Name darf höchstens 15 Zeichen lang sein!");
     }else{
         alert("Ungültiger Name!");
     }
-    username = prompt("Please enter your name:", "John Doe");
+    username = prompt("Please enter your name:", "Schmuserkadser");
 }
 initServer();
