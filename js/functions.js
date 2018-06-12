@@ -107,8 +107,8 @@ function initMinus(minus_json) {
         hr = "";
         if (i < minus_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'><b>"+ minus_upgrades[i][5] + "</b>|" + formatBlus(minus_upgrades[i][2])
-            +"|Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
+        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'><b>"+ minus_upgrades[i][5] + "</b>|<code id='minus_"+i+"'>" + formatBlus(minus_upgrades[i][2])
+            +"</code>|Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
             "><code>Send Minus</code></button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
@@ -124,10 +124,7 @@ function sendMinus(minus_id, buy_all) {
         minus_upgrades[minus_id][2] += (Math.sin(x*0.01)*200+x)/10;
         minus_upgrades[minus_id][2] = parseFloat(minus_upgrades[minus_id][2].toFixed(2));
 
-        html = "Cost " + formatBlus(minus_upgrades[minus_id][2]) +"  Minus -" +
-            formatBytes(minus_upgrades[minus_id][1]) +"/s";
-
-        document.getElementById('content_minus_' + minus_id).innerHTML = html;
+        document.getElementById('minus_' + minus_id).innerHTML = formatBlus(minus_upgrades[minus_id][2]);
 
         user_selection = document.getElementById("minus_name_selection");
         user_selection = user_selection.options[user_selection.selectedIndex].value;
