@@ -66,14 +66,17 @@ function initDiskspace(diskspace_json) {
     unlocks_disk = Array(disk_upgrades.length);
 
     for (let i = 0; i < disk_upgrades.length; i++) {
-        unlocks_disk[i] = true; // set true for testing and until storage unlocks are not implemented
+        unlocks_disk[i] = false; // set true for testing and until storage unlocks are not implemented
 
         hr = "";
         if (i < disk_upgrades.length - 1) {hr = "<hr>"}
 
         html = "<span id='disk_" + i +"'><code id='content_disk_" + i +"'>Cost " + disk_upgrades[i][2]
             +"  Storage Space " + disk_upgrades[i][1] +"KB</code><br><button onclick='addDiskSpace(" + i + ",false)' class='myButton'" +
-            " style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button>" + hr + "</span>";
+            " style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button><button " +
+            "id='disk_space_unlock_" + i +"' onclick='unlockDisk(" + i + "," + disk_upgrades[i][3] + ',"' +
+            "disk_space_unlock_" + i + '"' +  ")' class='myButton'><code>" + disk_upgrades[i][3] + " Blus</code></button>"
+            + hr + "</span>";
 
         document.getElementById('disks').innerHTML += html;
     }
@@ -81,10 +84,23 @@ function initDiskspace(diskspace_json) {
     drawPie();
 }
 
+
+function unlockDisk(disk_id, cost, remo_id) {
+    if (cost <= current_counter_money) {
+        unlocks_disk[disk_id] = true;
+        current_counter_money -= cost;
+
+        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById(remo_id).remove();
+        alert(remo_id);
+    }
+}
+
+
 function initMinus(minus_json) {
     minus_upgrades = minus_json["minus"];
 
-    unlocks_minus = Array(minus_upgrades.length)
+    unlocks_minus = Array(minus_upgrades.length);
 
     for (let i = 0; i < minus_upgrades.length; i++) {
         unlocks_minus[i] = true; // set true for testing and until minus unlocks are not implemented
@@ -94,7 +110,7 @@ function initMinus(minus_json) {
 
         html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'>Cost " + minus_upgrades[i][2]
             +"  Minus -" + minus_upgrades[i][1] +"B/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
-            " style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][4] + "</code></button>" + hr + "</span>";
+            " style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][5] + "</code></button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
     }
@@ -144,6 +160,14 @@ function formatBytes(kbytes) {
     else if(bytes < 1048576) return(bytes / 1024).toFixed(2) + " KB";
     else if(bytes < 1073741824) return(bytes / 1048576).toFixed(2) + " MB";
     else return(bytes / 1073741824).toFixed(2) + " GB";
+}
+
+
+function formatBlus(blus) {
+    if(bytes < 1000) return bytes + " Blus";
+    else if(bytes < 1000000) return(bytes / 1024).toFixed(2) + " KBlus";
+    else if(bytes < 1000000000) return(bytes / 1048576).toFixed(2) + " MBlus";
+    else return(bytes / 1000000000).toFixed(2) + " GBlus";
 }
 
 
@@ -359,10 +383,17 @@ function initServer() {
             updateUsers(user.id, user.username, user.blus);
         });
     });
-    
+
+    socket.on('disconnect_from_user', function (msg) {
+       user_id = JSON.parse(msg)["user"];
+       deleteUser(user_id)
+    });
+
     socket.on('got_minus', function (msg) {
         minus = JSON.parse(msg);
         cross_per_turn -= minus["minus"];
+        cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
+        document.getElementById("money_turn").innerHTML = cross_per_turn;
     });
 }
 

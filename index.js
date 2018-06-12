@@ -23,17 +23,25 @@ blus_upgrades.push([0, 0.1, 20, 100, 1, '"Tag"']);
 blus_upgrades.push([0, 1, 50, 500, 15, '"Comment"']);
 blus_upgrades.push([0, 15, 200, 5000, 20, '"Funny Comment"']);
 blus_upgrades.push([0, 100, 5000, 30000, 30, '"Top Comment"']);
+blus_upgrades.push([0, 1000, 75000, 50000, 12*1024, '"Invite"']);
+blus_upgrades.push([0, 5000, 200000, 1500000, 150*1024, '"Post"']);
+
 
 var diskspace_upgrades = [];
 // number of bought items, disk space (in kb), cost, unlock cost, name
 diskspace_upgrades.push([0, 10, 50 ,100, '"Magnetband"']);
 diskspace_upgrades.push([0, 50, 750, 25000, '"Floppy-Disk"']);
-diskspace_upgrades.push([0, 200, 12000, 50000, '"USB-Stick"']);
+diskspace_upgrades.push([0, 1024, 10000, 25000, '"Floppy-Disk 2.0"']);
+diskspace_upgrades.push([0, 64*1024, 50000, 45000, '"USB-Stick"']);
+diskspace_upgrades.push([0, 512*1024, 450000, 1000000, '"SD-Card"']);
 
 var minus_upgrades = [];
 // 0 number of bought items, minus per turn, cost, cost for unlock, disk space usage, name
 minus_upgrades.push([0, 1, 500, 15000, 15, '"Hate Comment"']);
 minus_upgrades.push([0, 15, 7500, 42500, 50, '"Downvote Spam"']);
+minus_upgrades.push([0, 128, 200000, 150000, 100*1024, '"Bad Post"']);
+minus_upgrades.push([0, 500, 650000, 1750000, 450*1024, '"Shittypost"']);
+
 
 cross_per_turn = -1;
 total_disk_space = 10;
@@ -81,6 +89,9 @@ io.on('connection', function(socket){
     socket.on('disconnect', function() {
         console.log("Username: " + username + " ID: " + user_id + " disconnected");
         users = users.filter(function (user) { return user.id != user_id });
+        users_sockets.forEach(function (user) {
+            user.socket.emit("disconnect_from_user", '{"user":"' + user_id + '"}');
+        });
     });
 
     socket.on('sync', function (msg) {
