@@ -53,11 +53,10 @@
         <fieldset class="Upgrades">
             <legend>Buy stuff!</legend>
             <div class="navbar">
-                <button class="myButton" onclick="setActive('Actions')" style="grid-row: 1; grid-column: 1;">Actions</button>
-                <button class="myButton" onclick="setActive('unlocks')" style="grid-row: 1; grid-column: 2;">Unlocks</button>
-                <button class="myButton" onclick="setActive('Storage')" style="grid-row: 2; grid-column: 1;">Storage</button>
-                <button class="myButton" onclick="setActive('Minus')" style="grid-row: 2; grid-column: 2;">Minus</button>
-                <button class="myButton" onclick="setActive('multipliers')" style="grid-row: 3; grid-column: 1;">Multipliers</button>
+                <button class="myButton" onclick="setActive('Actions')" style="grid-row: 1; grid-column: 1; width: auto; height: auto;">Actions</button>
+                <button class="myButton" onclick="setActive('Storage')" style="grid-row: 1; grid-column: 2; width: auto; height: auto;">Storage</button>
+                <button class="myButton" onclick="setActive('Minus')" style="grid-row: 2; grid-column: 1; width: auto; height: auto;">Minus</button>
+                <button class="myButton" onclick="setActive('multipliers')" style="grid-row: 2; grid-column: 2; width: auto; height: auto;">Multipliers</button>
             </div>
             <fieldset id="Actions" class="field_set banner" style="display: block;">
                 <legend><code>Actions</code></legend>
@@ -218,9 +217,11 @@
                 font-family:Courier New;
                 font-size:14px;
                 font-weight:bold;
-                padding:5px 35px;
+                padding:5px 5px;
                 text-decoration:none;
                 text-shadow:0px 0px 0px #ffffff;
+                width: 100px;
+                height: 25px;
             }
             .myButton:hover {
                 background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));

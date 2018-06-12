@@ -45,17 +45,12 @@ function initMiners(miner_json) {
         hr = "";
         if (i < blus_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='miner_" + i +"'><code id='content_miner_" + i +"'>Cost " + blus_upgrades[i][2]
-            +"  Blus " + blus_upgrades[i][1] + " Disk Space -"  + formatBytes(blus_upgrades[i][4]) + "</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
-            " style='width: 200px; height: 25px;'><code>" + blus_upgrades[i][5] + "</code></button>" + hr + "</span>";
+        html = "<span id='miner_" + i +"'><code id='content_miner_" + i + "'><b>" + blus_upgrades[i][5] + "</b>|<code id='actioncost_" + i + "'>" + blus_upgrades[i][2]
+            +"</code>  Blus|-"  + formatBytes(blus_upgrades[i][4]) + "|" + blus_upgrades[i][3] + "B Unlock</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
+            ">Buy</button><button id=\'unlock_" + i + "\' onclick='unlock(" +  i + ","+ blus_upgrades[i][3] +", \"unlock_" + i + "\")' class='myButton'><code>Unlock</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
 
-        html = "<span id=\'unlock_" + i + "\'><code>Cost " + blus_upgrades[i][3] + "  " + blus_upgrades[i][5] + "" +
-            "</code><br><button onclick='unlock(" + i + "," + blus_upgrades[i][3] + ", \"unlock_" + i + "\")'" +
-            " class='myButton' style='width: 200px; height: 25px;'><code>Unlock</code></button>" + hr + "</span>";
-
-        document.getElementById('unlock_config').innerHTML += html;
     }
 }
 
@@ -165,8 +160,7 @@ function add(miner_id, buy_all) {
         current_counter_money = parseFloat(current_counter_money.toFixed(4));
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
-        document.getElementById("content_miner_" + miner_id).innerText = "Cost " + blus_upgrades[miner_id][2] +
-            " Blus " + blus_upgrades[miner_id][1] + " Disk Space -" + formatBytes(blus_upgrades[miner_id][4]);
+        document.getElementById("actioncost_" + miner_id).innerText = blus_upgrades[miner_id][2];
         document.getElementById("money_turn").innerHTML = cross_per_turn;
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
         document.getElementById("user_money").innerHTML = current_counter_money;
