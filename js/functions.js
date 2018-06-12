@@ -108,8 +108,8 @@ function initMinus(minus_json) {
         if (i < minus_upgrades.length - 1) {hr = "<hr>"}
 
         html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'><b>"+ minus_upgrades[i][5] + "</b>|" + formatBlus(minus_upgrades[i][2])
-            +"|Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
-            "><code>Send Minus</code></button><button id='minus_unlock_" + i + "' onclick='unlock_minus(" + i + ',' + minus_upgrades[i][3] + ',"' + "minus_unlock_" + i + '"' + ")'>" + minus_upgrades[i][3] + "</button>" + hr + "</span>";
+            +"|-" + formatBlus(minus_upgrades[i][1]) +"/s|" + formatBlus(minus_upgrades[i][3]) + " Unlock</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
+            "><code>Send Minus</code></button><button id='minus_unlock_" + i + "' class='myButton' onclick='unlock_minus(" + i + ',' + minus_upgrades[i][3] + ',"' + "minus_unlock_" + i + '"' + ")'>Unlock</button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
     }
