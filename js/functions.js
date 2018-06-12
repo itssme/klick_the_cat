@@ -71,11 +71,11 @@ function initDiskspace(diskspace_json) {
         hr = "";
         if (i < disk_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='disk_" + i +"'><code id='content_disk_" + i +"'>Cost " + disk_upgrades[i][2]
-            +"  Storage Space " + disk_upgrades[i][1] +"KB</code><br><button onclick='addDiskSpace(" + i + ",false)' class='myButton'" +
-            " style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button><button " +
+        html = "<span id='disk_" + i +"'><code id='content_disk_" + i +"'><b>" + disk_upgrades[i][4] + "</b>|<code id='diskCost_"+i+"'>" + formatBlus(disk_upgrades[i][2])
+            + "</code>|+" + formatBytes(disk_upgrades[i][1]) +"|" + formatBlus(disk_upgrades[i][3]) + " Unlock</code><br><button onclick='addDiskSpace(" + i + ",false)' class='myButton'" +
+            "><code>Buy</code></button><button " +
             "id='disk_space_unlock_" + i +"' onclick='unlockDisk(" + i + "," + disk_upgrades[i][3] + ',"' +
-            "disk_space_unlock_" + i + '"' +  ")' class='myButton'><code>" + disk_upgrades[i][3] + " Blus</code></button>"
+            "disk_space_unlock_" + i + '"' +  ")' class='myButton'><code>Unlock</code></button>"
             + hr + "</span>";
 
         document.getElementById('disks').innerHTML += html;
@@ -92,7 +92,6 @@ function unlockDisk(disk_id, cost, remo_id) {
 
         document.getElementById("user_money").innerHTML = current_counter_money;
         document.getElementById(remo_id).remove();
-        alert(remo_id);
     }
 }
 
@@ -146,6 +145,8 @@ function addDiskSpace(disk_id, buy_all) {
 
         document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
+        document.getElementById("diskCost_" + disk_id).innerText = formatBlus(disk_upgrades[disk_id][2]);
+        console.log(disk_upgrades[disk_id]);
 
         drawPie();
     }
@@ -173,10 +174,10 @@ function formatBytes(kbytes) {
 
 
 function formatBlus(blus) {
-    if(bytes < 1000) return bytes + " Blus";
-    else if(bytes < 1000000) return(bytes / 1024).toFixed(2) + " KBlus";
-    else if(bytes < 1000000000) return(bytes / 1048576).toFixed(2) + " MBlus";
-    else return(bytes / 1000000000).toFixed(2) + " GBlus";
+    if(blus < 1000) return blus + " Blus";
+    else if(blus < 1000000) return(blus / 1024).toFixed(2) + " KBlus";
+    else if(blus < 1000000000) return(blus / 1048576).toFixed(2) + " MBlus";
+    else return(blus / 1000000000).toFixed(2) + " GBlus";
 }
 
 
@@ -421,23 +422,20 @@ function compare(a,b) {
 
 function updateLeaderboard() {
     var leaderboard = document.getElementById("leaderList");
-    var dropdown = document.getElementById("minus_name_selection");
     users.sort(compare);
     leaderboard.innerHTML = "";
-    dropdown.innerHTML = "";
     var i = 1;
     users.forEach(function (user) {
         var newRow   = leaderboard.insertRow(leaderboard.rows.length);
         newRow.insertCell(0).appendChild(document.createTextNode(i + "."));
         newRow.insertCell(1).appendChild(document.createTextNode(user.name));
         newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " B/s"));
-        var option = '<option value="' + user.id + '">' + user.name + '</option>';
-        dropdown.innerHTML += option;
         i++;
     });
 }
 
 function updateUsers(id, username, blus) {
+    var dropdown = document.getElementById("minus_name_selection");
     users.forEach(function(user) {
         if (user.id == id) {
             user.blus = blus;
@@ -445,12 +443,19 @@ function updateUsers(id, username, blus) {
     });
     if(users.filter(function (user) { return user.id == id; }).length == 0) {
         users.push({"id": id, "name": username, "blus": blus});
+        var option = '<option value="' + id + '">' + username + '</option>';
+        dropdown.innerHTML += option;
     }
     updateLeaderboard();
 }
 
 function deleteUser(id) {
     users = users.filter(function (user) { return user.id != id });
+    var selectobject=document.getElementById("minus_name_selection")
+    for (var i=0; i<selectobject.length; i++){
+        if (selectobject.options[i].value == id )
+            selectobject.remove(i);
+    }
     updateLeaderboard();
 }
 
