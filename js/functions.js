@@ -47,13 +47,13 @@ function initMiners(miner_json) {
 
         html = "<span id='miner_" + i +"'><code id='content_miner_" + i +"'>Cost " + blus_upgrades[i][2]
             +"  Blus " + blus_upgrades[i][1] + " Disk Space -"  + formatBytes(blus_upgrades[i][4]) + "</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
-            "style='width: 200px; height: 25px;'><code>" + blus_upgrades[i][5] + "</code></button>" + hr + "</span>";
+            " style='width: 200px; height: 25px;'><code>" + blus_upgrades[i][5] + "</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
 
         html = "<span id=\'unlock_" + i + "\'><code>Cost " + blus_upgrades[i][3] + "  " + blus_upgrades[i][5] + "" +
             "</code><br><button onclick='unlock(" + i + "," + blus_upgrades[i][3] + ", \"unlock_" + i + "\")'" +
-            "class='myButton' style='width: 200px; height: 25px;'><code>Unlock</code></button>" + hr + "</span>";
+            " class='myButton' style='width: 200px; height: 25px;'><code>Unlock</code></button>" + hr + "</span>";
 
         document.getElementById('unlock_config').innerHTML += html;
     }
@@ -78,7 +78,7 @@ function initDiskspace(diskspace_json) {
 
         html = "<span id='disk_" + i +"'><code id='content_disk_" + i +"'>Cost " + disk_upgrades[i][2]
             +"  Storage Space " + disk_upgrades[i][1] +"KB</code><br><button onclick='addDiskSpace(" + i + ",false)' class='myButton'" +
-            "style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button>" + hr + "</span>";
+            " style='width: 200px; height: 25px;'><code>" + disk_upgrades[i][4] + "</code></button>" + hr + "</span>";
 
         document.getElementById('disks').innerHTML += html;
     }
@@ -99,7 +99,7 @@ function initMinus(minus_json) {
 
         html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'>Cost " + minus_upgrades[i][2]
             +"  Minus -" + minus_upgrades[i][1] +"B/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
-            "style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][4] + "</code></button>" + hr + "</span>";
+            " style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][4] + "</code></button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
     }
@@ -387,14 +387,18 @@ function compare(a,b) {
 
 function updateLeaderboard() {
     var leaderboard = document.getElementById("leaderList");
+    var dropdown = document.getElementById("minus_name_selection");
     users.sort(compare);
     leaderboard.innerHTML = "";
+    dropdown.innerHTML = "";
     var i = 1;
     users.forEach(function (user) {
         var newRow   = leaderboard.insertRow(leaderboard.rows.length);
         newRow.insertCell(0).appendChild(document.createTextNode(i + "."));
         newRow.insertCell(1).appendChild(document.createTextNode(user.name));
         newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " B/s"));
+        var option = '<option value="' + user.id + '">' + user.name + '</option>';
+        dropdown.innerHTML += option;
         i++;
     });
 }
@@ -407,8 +411,6 @@ function updateUsers(id, username, blus) {
     });
     if(users.filter(function (user) { return user.id == id; }).length == 0) {
         users.push({"id": id, "name": username, "blus": blus});
-        html = '<option value="' + id + '">' + username + '</option>';
-        document.getElementById("minus_name_selection").innerHTML += html;
     }
     updateLeaderboard();
 }

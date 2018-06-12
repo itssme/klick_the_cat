@@ -80,6 +80,7 @@ io.on('connection', function(socket){
 
     socket.on('disconnect', function() {
         console.log("Username: " + username + " ID: " + user_id + " disconnected");
+        users = users.filter(function (user) { return user.id != user_id });
     });
 
     socket.on('sync', function (msg) {
