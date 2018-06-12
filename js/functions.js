@@ -107,8 +107,8 @@ function initMinus(minus_json) {
         hr = "";
         if (i < minus_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'>Cost " + minus_upgrades[i][2]
-            +"  Minus -" + minus_upgrades[i][1] +"B/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
+        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'>Cost " + formatBlus(minus_upgrades[i][2])
+            +"  Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
             " style='width: 200px; height: 25px;'><code>" + minus_upgrades[i][5] + "</code></button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
@@ -117,15 +117,22 @@ function initMinus(minus_json) {
 
 
 function sendMinus(minus_id, buy_all) {
-    if (minus_upgrades[minus_id][2] <= current_counter_money && unlocks_minus[minus_id]) {
-        console.log("send minus");
-
+    if (minus_upgrades[minus_id][2] <= current_counter_money && unlocks_minus[minus_id] && minus_upgrades[minus_id][4]
+                                                                                 <= total_disk_space-used_disk_space) {
+        minus_upgrades[minus_id][0] += 1;
         x = minus_upgrades[minus_id][2];
         minus_upgrades[minus_id][2] += (Math.sin(x*0.01)*200+x)/10;
         minus_upgrades[minus_id][2] = parseFloat(minus_upgrades[minus_id][2].toFixed(2));
 
+        html = "Cost " + formatBlus(minus_upgrades[minus_id][2]) +"  Minus -" +
+            formatBytes(minus_upgrades[minus_id][1]) +"/s";
+
+        document.getElementById('content_minus_' + minus_id).innerHTML = html;
+
         user_selection = document.getElementById("minus_name_selection");
         user_selection = user_selection.options[user_selection.selectedIndex].value;
+        document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
+        document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
 
         socket.emit('send_minus', '{"user_id":"' + user_selection + '", "minus_id":"' + minus_id + '"}');
     }
@@ -159,7 +166,10 @@ function getUsedDiskSpace() {
         sum += blus_upgrades[i][0] * blus_upgrades[i][4];
     }
 
-    // TODO: do the same for the minus_upgrades
+    for (let i = 0; i < minus_upgrades.length; i++) {
+        sum += minus_upgrades[i][0] * minus_upgrades[i][4];
+    }
+
     return sum;
 }
 
@@ -279,6 +289,10 @@ function drawPie() {
 
     for (let i = 0; i < blus_upgrades.length; i++) {
         total_usage.push([blus_upgrades[i][0] * blus_upgrades[i][4], blus_upgrades[i][5]]);
+    }
+
+    for (let i = 0; i < minus_upgrades.length; i++) {
+        total_usage.push([minus_upgrades[i][0] * minus_upgrades[i][4], minus_upgrades[i][5]]);
     }
 
     sum = getUsedDiskSpace();
