@@ -30,8 +30,8 @@ blus_upgrades.push([0, 5000, 200000, 1500000, 150*1024, '"Post"']);
 var diskspace_upgrades = [];
 // number of bought items, disk space (in kb), cost, unlock cost, name
 diskspace_upgrades.push([0, 10, 50 ,100, '"Magnetband"']);
-diskspace_upgrades.push([0, 50, 750, 25000, '"Floppy-Disk"']);
-diskspace_upgrades.push([0, 1024, 10000, 25000, '"Floppy-Disk 2.0"']);
+diskspace_upgrades.push([0, 50, 200, 2500, '"Floppy-Disk"']);
+diskspace_upgrades.push([0, 1024, 5000, 15000, '"Floppy-Disk 2.0"']);
 diskspace_upgrades.push([0, 64*1024, 50000, 45000, '"USB-Stick"']);
 diskspace_upgrades.push([0, 512*1024, 450000, 1000000, '"SD-Card"']);
 

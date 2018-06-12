@@ -120,6 +120,11 @@ function initMinus(minus_json) {
 function sendMinus(minus_id, buy_all) {
     if (minus_upgrades[minus_id][2] <= current_counter_money && unlocks_minus[minus_id]) {
         console.log("send minus");
+
+        x = minus_upgrades[minus_id][2];
+        minus_upgrades[minus_id][2] += (Math.sin(x*0.01)*200+x)/10;
+        minus_upgrades[minus_id][2] = parseFloat(minus_upgrades[minus_id][2].toFixed(2));
+
         user_selection = document.getElementById("minus_name_selection");
         user_selection = user_selection.options[user_selection.selectedIndex].value;
 
@@ -134,6 +139,10 @@ function addDiskSpace(disk_id, buy_all) {
 
         total_disk_space += disk_upgrades[disk_id][1];
         current_counter_money -= disk_upgrades[disk_id][2];
+
+        x = disk_upgrades[disk_id][2];
+        disk_upgrades[disk_id][2] += (Math.sin(x*0.01)*200+x)/100;
+        disk_upgrades[disk_id][2] = parseFloat(disk_upgrades[disk_id][2].toFixed(2));
 
         document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
@@ -403,9 +412,9 @@ function get_users() {
 }
 
 function compare(a,b) {
-    if (parseInt(a.blus) < parseInt(b.blus))
+    if (parseFloat(a.blus) < parseFloat(b.blus))
         return 1;
-    if (parseInt(a.blus) > parseInt(b.blus))
+    if (parseFloat(a.blus) > parseFloat(b.blus))
         return -1;
     return 0;
 }
