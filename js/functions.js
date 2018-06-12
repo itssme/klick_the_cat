@@ -102,14 +102,14 @@ function initMinus(minus_json) {
     unlocks_minus = Array(minus_upgrades.length);
 
     for (let i = 0; i < minus_upgrades.length; i++) {
-        unlocks_minus[i] = true; // set true for testing and until minus unlocks are not implemented
+        unlocks_minus[i] = false; // set true for testing and until minus unlocks are not implemented
 
         hr = "";
         if (i < minus_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'><b>"+ minus_upgrades[i][5] + "</b>|<code id='minus_"+i+"'>" + formatBlus(minus_upgrades[i][2])
-            +"</code>|Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
-            "><code>Send Minus</code></button>" + hr + "</span>";
+        html = "<span id='minus_" + i +"'><code id='content_minus_" + i +"'><b>"+ minus_upgrades[i][5] + "</b>|" + formatBlus(minus_upgrades[i][2])
+            +"|Minus -" + formatBlus(minus_upgrades[i][1]) +"/s</code><br><button onclick='sendMinus(" + i + ",false)' class='myButton'" +
+            "><code>Send Minus</code></button><button id='minus_unlock_" + i + "' onclick='unlock_minus(" + i + ',' + minus_upgrades[i][3] + ',"' + "minus_unlock_" + i + '"' + ")'>" + minus_upgrades[i][3] + "</button>" + hr + "</span>";
 
         document.getElementById('minus_upgrade').innerHTML += html;
     }
@@ -118,7 +118,8 @@ function initMinus(minus_json) {
 
 function sendMinus(minus_id, buy_all) {
     if (minus_upgrades[minus_id][2] <= current_counter_money && unlocks_minus[minus_id] && minus_upgrades[minus_id][4]
-                                                                                 <= total_disk_space-used_disk_space) {
+                                                                                 <= total_disk_space-used_disk_space
+                                                                                 && unlocks_minus[minus_id]) {
         minus_upgrades[minus_id][0] += 1;
         x = minus_upgrades[minus_id][2];
         minus_upgrades[minus_id][2] += (Math.sin(x*0.01)*200+x)/10;
@@ -132,6 +133,16 @@ function sendMinus(minus_id, buy_all) {
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
 
         socket.emit('send_minus', '{"user_id":"' + user_selection + '", "minus_id":"' + minus_id + '"}');
+    }
+}
+
+function unlock_minus(minus_id, cost, remo_id) {
+    if (cost <= current_counter_money) {
+        unlocks_minus[minus_id] = true;
+        current_counter_money -= cost;
+
+        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById(remo_id).remove();
     }
 }
 
