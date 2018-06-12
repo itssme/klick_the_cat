@@ -80,10 +80,20 @@ io.on('connection', function(socket){
 
     socket.on('username', function (msg) {
         username = JSON.parse(msg)["username"];
-        users.push({"id": user_id, "username": username, "blus": 0})
-        users_sockets.push({"id": user_id, "socket": socket});
-        console.log("user id: " + user_id_counter + " set name: " + username);
-        socket.emit('user_id', '{"user_id": "' + user_id + '"}');
+        invalid = false;
+        users.forEach(function (user) {
+            if (user.username == username) {
+                invalid = true;
+                socket.emit('username_invalid');
+            }
+        });
+
+        if (! invalid)  {
+            users.push({"id": user_id, "username": username, "blus": 0})
+            users_sockets.push({"id": user_id, "socket": socket});
+            console.log("user id: " + user_id_counter + " set name: " + username);
+            socket.emit('user_id', '{"user_id": "' + user_id + '"}');
+        }
     });
 
     socket.on('disconnect', function() {

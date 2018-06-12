@@ -396,6 +396,11 @@ function initServer() {
 
     socket.emit('username', '{"username": "' + username + '"}');
 
+    socket.on('username_invalid', function () {
+        setUsername();
+        socket.emit('username', '{"username": "' + username + '"}');
+    });
+
     socket.on('user_id', function (msg) {
         user_id = JSON.parse(msg)["user_id"];
         users.push({"id": user_id, "name": username, "blus": cross_per_turn});
@@ -473,15 +478,20 @@ function deleteUser(id) {
     updateLeaderboard();
 }
 
+
 var user_id = -1;
 var username = "";
-username = prompt("Please enter your name:", "Schmuserkadser");
-while (username == null || username == "" || username.length > 15) {
-    if (username.length > 15) {
-        alert("Der Name darf höchstens 15 Zeichen lang sein!");
-    }else{
-        alert("Ungültiger Name!");
-    }
+
+function setUsername() {
     username = prompt("Please enter your name:", "Schmuserkadser");
+    while (username == null || username == "" || username.length > 15) {
+        if (username.length > 15) {
+            alert("Der Name darf höchstens 15 Zeichen lang sein!");
+        }else{
+            alert("Ungültiger Name!");
+        }
+        username = prompt("Please enter your name:", "Schmuserkadser");
+    }
 }
+setUsername()
 initServer();
