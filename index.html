@@ -83,10 +83,12 @@
 
                 </div>
                 <hr>
-                <label>Select target:</label>
+                <div id="selection">
+                    <label>Select target:</label>
                     <select id="minus_name_selection">
 
                     </select>
+                </div>
 
             </fieldset>
 
@@ -168,7 +170,11 @@
                 display: grid;
                 grid-template-columns: 50% 50%;
                 grid-template-rows: 30% 30% 30%;
-                heigth: 15%;
+                heigth: 10%;
+            }
+
+            #selection{
+                height: 5%;
             }
 
             .content{
