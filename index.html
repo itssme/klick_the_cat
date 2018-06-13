@@ -27,11 +27,11 @@
         
         <fieldset id="main_fieldset" class="field_set">
             <legend>> <code>click!</code> <</legend>
-            <center><img src="resources/schmuserkadser.png" onclick="over_line()" style="height: 300px"></center>
+            <center style="height: 100%"><img src="resources/schmuserkadser.png" onclick="over_line()"></center>
         </fieldset>
             <div style="grid-row: 5; grid-column: 2 / span 1;"></div>
 
-        <fieldset class="field_set" style="grid-row: 6 / span 1; grid-column: 2;">
+        <fieldset class="field_set" style="grid-row: 6 / span 2; grid-column: 2;">
             <legend>Your Stats</legend>
             <code>Global counter <span id="user_counter">0</span></code> <br>
             <code>Current Blus <span id="user_money">0</span></code> <br>
@@ -39,14 +39,14 @@
             <code>Available Disk Space <span id="available_disk_space"></span></code>
         </fieldset>
         
-        <fieldset class="field_set" style="grid-row: 6 / span 1; grid-column: 3;">
+        <fieldset class="field_set" style="grid-row: 6 / span 2; grid-column: 3;">
             <legend>Blus Stats</legend>
             <code>Global posts counter <span id="miner_counter">0</span></code> <br>
             <code>Actions <span id="miner_anz">0</span></code> <br>
             <code>Blus per Sec. <span id="money_turn">0</span></code>
         </fieldset>
         
-        <div id="chart_div" style="grid-row: 7 / span 1; grid-column: 2 /span 2;"></div>
+        <div id="chart_div" style="grid-row: 8 / span 3; grid-column: 2 /span 2;"></div>
 
         <div id="chartContainer" style="grid-row: 5 / span 5; grid-column: 4;"></div>
         
@@ -156,16 +156,23 @@
 
             body {
                 margin: 0;
-                min-height: 100vh;
+                height: 100vh;
+            }
+
+            img{
+                height: -webkit-fill-available;
+                padding-bottom: 3%;
             }
 
             .navbar{
                 display: grid;
                 grid-template-columns: 50% 50%;
                 grid-template-rows: 30% 30% 30%;
+                heigth: 15%;
             }
 
             .content{
+                height: 100%;
                 display: grid;
                 grid-template-columns: 25% 25% 25% 25%;
                 grid-template-rows: repeat(10, 10%);
@@ -180,13 +187,24 @@
                 grid-column: 1;
                 grid-row: 1 /span 10;
                 border-radius: 25px;
+                height: 100%;
             }
+
+            #Actions{
+                height: 80%;
+            }
+
+            #miners{
+                height: 95%;
+                overflow: auto;
+            }
+
             
             #main_fieldset {
                 border-radius: 25px;
                 grid-row: 1 / span 4;
                 grid-column: 2 /span 2;
-                
+                height: 100%;
             }
             
             .field_set {
