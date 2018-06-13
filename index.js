@@ -25,6 +25,17 @@ blus_upgrades.push([0, 15, 200, 5000, 20, '"Funny Comment"']);
 blus_upgrades.push([0, 100, 5000, 30000, 30, '"Top Comment"']);
 blus_upgrades.push([0, 1000, 75000, 50000, 12*1024, '"Invite"']);
 blus_upgrades.push([0, 5000, 200000, 1500000, 150*1024, '"Post"']);
+blus_upgrades.push([0, 12500, 800000, 2000000, 1024*1024, '"NSFW Post"']);
+blus_upgrades.push([0, 50000, 1500000, 2500000, 2*1024*1024, '"NSFL Post"']);
+blus_upgrades.push([0, 125000, 3000000, 5000000, 6*1024*1024, '"Top Post"']);
+blus_upgrades.push([0, 125000, 4500000, 10000000, 32*1024*1024, '"OC Post"']);
+blus_upgrades.push([0, 500000, 10000000, 70000000, 48*1024*1024, '"Top NSFL Post"']);
+blus_upgrades.push([0, 1250000, 25000000, 150000000, 64*1024*1024, '"Top NSFW Post"']);
+blus_upgrades.push([0, 2000000, 75000000, 1000000000, 128*1024*1024, '"Schmuserkadser OC"']);
+blus_upgrades.push([0, 1750000, 100000000, 2500000000, 512*1024*1024, '"Top Cat Post"']);
+blus_upgrades.push([0, 5000000, 1000000000, 10000000000, 5*1024*1024*1024, '"Post of the Month"']);
+blus_upgrades.push([0, 15000000, 5000000000, 75000000000, 128*1024*1024*1024, '"NSFW OC"']);
+blus_upgrades.push([0, 100000000, 55000000000, 125000000000, 512*1024*1024*1024, '"Schmuserkadser"']);
 
 
 var diskspace_upgrades = [];
@@ -34,6 +45,12 @@ diskspace_upgrades.push([0, 50, 200, 2500, '"Floppy-Disk"']);
 diskspace_upgrades.push([0, 1024, 5000, 15000, '"Floppy-Disk 2.0"']);
 diskspace_upgrades.push([0, 64*1024, 50000, 45000, '"USB-Stick"']);
 diskspace_upgrades.push([0, 512*1024, 450000, 1000000, '"SD-Card"']);
+diskspace_upgrades.push([0, 4*1024*1024, 1000000, 2225000, '"USB-2.0"']);
+diskspace_upgrades.push([0, 32*1024*1024, 4200000, 5000000, '"USB-3.0"']);
+diskspace_upgrades.push([0, 128*1024*1024, 10000000, 15000000, '"SSD"']);
+diskspace_upgrades.push([0, 2*1024*1024*1024, 100000000, 500000000, '"HDD"']);
+diskspace_upgrades.push([0, 64*1024*1024*1024, 1500000000, 1500000000, '"Datacenter"']);
+
 
 var minus_upgrades = [];
 // 0 number of bought items, minus per turn, cost, cost for unlock, disk space usage, name
@@ -41,6 +58,8 @@ minus_upgrades.push([0, 1, 500, 15000, 15, '"Hate Comment"']);
 minus_upgrades.push([0, 15, 7500, 42500, 50, '"Downvote Spam"']);
 minus_upgrades.push([0, 128, 200000, 150000, 100*1024, '"Bad Post"']);
 minus_upgrades.push([0, 500, 650000, 1750000, 450*1024, '"Shittypost"']);
+minus_upgrades.push([0, 100000, 5000000, 7000000, 32*1024*1024, '"Repost"']);
+minus_upgrades.push([0, 500000, 200000000, 5000000000, 1.5*1024*1024*1024, '"Very Bad Repost"']);
 
 
 cross_per_turn = -1;

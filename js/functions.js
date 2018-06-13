@@ -45,8 +45,8 @@ function initMiners(miner_json) {
         hr = "";
         if (i < blus_upgrades.length - 1) {hr = "<hr>"}
 
-        html = "<span id='miner_" + i +"'><code id='content_miner_" + i + "'><b>" + blus_upgrades[i][5] + "</b>|<code id='actioncost_" + i + "'>" + blus_upgrades[i][2]
-            +"</code>  Blus|-"  + formatBytes(blus_upgrades[i][4]) + "|" + formatBlus(blus_upgrades[i][3]) + " Unlock</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
+        html = "<span id='miner_" + i +"'><code id='content_miner_" + i + "'><b>" + blus_upgrades[i][5] + "</b>|<code id='actioncost_" + i + "'>" + formatBlus(blus_upgrades[i][2])
+            +"</code>|-"  + formatBytes(blus_upgrades[i][4]) + "|" + formatBlus(blus_upgrades[i][3]) + " Unlock</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
             ">Buy</button><button id=\'unlock_" + i + "\' onclick='unlock(" +  i + ","+ blus_upgrades[i][3] +", \"unlock_" + i + "\")' class='myButton'><code>Unlock</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
@@ -90,7 +90,7 @@ function unlockDisk(disk_id, cost, remo_id) {
         unlocks_disk[disk_id] = true;
         current_counter_money -= cost;
 
-        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
         document.getElementById(remo_id).remove();
     }
 }
@@ -141,7 +141,7 @@ function unlock_minus(minus_id, cost, remo_id) {
         unlocks_minus[minus_id] = true;
         current_counter_money -= cost;
 
-        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
         document.getElementById(remo_id).remove();
     }
 }
@@ -161,8 +161,6 @@ function addDiskSpace(disk_id, buy_all) {
         document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
         document.getElementById("diskCost_" + disk_id).innerText = formatBlus(disk_upgrades[disk_id][2]);
-        console.log(disk_upgrades[disk_id]);
-
         drawPie();
     }
 }
@@ -187,7 +185,8 @@ function formatBytes(kbytes) {
     if(bytes < 1024) return bytes + " Bytes";
     else if(bytes < 1048576) return(bytes / 1024).toFixed(2) + " KB";
     else if(bytes < 1073741824) return(bytes / 1048576).toFixed(2) + " MB";
-    else return(bytes / 1073741824).toFixed(2) + " GB";
+    else if(bytes < 1099511627776) return(bytes / 1073741824).toFixed(2) + "GB";
+    else return(bytes / 1099511627776).toFixed(2) + " TB";
 }
 
 
@@ -209,13 +208,13 @@ function add(miner_id, buy_all) {
 
         x = blus_upgrades[miner_id][2];
         blus_upgrades[miner_id][2] += (Math.sin(x*0.01)*200+x)/100;
-        current_counter_money = parseFloat(current_counter_money.toFixed(4));
+        current_counter_money = current_counter_money;
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
-        document.getElementById("actioncost_" + miner_id).innerText = blus_upgrades[miner_id][2];
+        document.getElementById("actioncost_" + miner_id).innerText = formatBlus(blus_upgrades[miner_id][2]);
         document.getElementById("money_turn").innerHTML = formatBlus(cross_per_turn);
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
-        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
+        document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
         document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
         drawPie();
@@ -231,7 +230,7 @@ function over_line() {
     counter = parseFloat(counter.toFixed(4));
     
     document.getElementById("user_counter").innerHTML = formatBlus(counter);
-    document.getElementById("user_money").innerHTML =  formatBlus(current_counter_money);
+    document.getElementById("user_money").innerHTML =  formatBlus(parseFloat(current_counter_money).toFixed(2));
     
 }
 
@@ -241,7 +240,7 @@ function unlock(miner_id, cost, remo_id) {
         unlocks[miner_id] = true;
         current_counter_money -= cost;
         
-        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
+        document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
         document.getElementById(remo_id).remove();
         
         if (check_array(unlocks)) {
@@ -257,7 +256,7 @@ function multip_add(change, cost, remo_id,id) {
         current_counter_money -= cost;
         multip_array[id] = true;
         
-        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
+        document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
         document.getElementById(remo_id).remove();
                 
         if (check_array(multip_array)) {
@@ -287,7 +286,7 @@ function mine() {
     miner_counter = parseFloat(miner_counter.toFixed(2));
     
     document.getElementById("miner_counter").innerHTML = miner_counter;
-    document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
+    document.getElementById("user_money").innerHTML = formatBlus(parseFloat(current_counter_money).toFixed(2));
 }
 
 setInterval(drawPie, 2000);
@@ -456,7 +455,7 @@ function updateLeaderboard() {
         var newRow   = leaderboard.insertRow(leaderboard.rows.length);
         newRow.insertCell(0).appendChild(document.createTextNode(i + "."));
         newRow.insertCell(1).appendChild(document.createTextNode(user.name));
-        newRow.insertCell(2).appendChild(document.createTextNode(user.blus + " B/s"));
+        newRow.insertCell(2).appendChild(document.createTextNode(formatBlus(user.blus) + "/s"));
         i++;
     });
 }
