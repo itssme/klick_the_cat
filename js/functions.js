@@ -536,6 +536,8 @@ function com_back_check() {
         com_back = current_counter_money;
         cpt_back = cross_per_turn;
     } else {
+        socket.emit('end', '{"ccm":"' + current_counter_money + '", "ccm_back":"' + com_back + '", "cpt":"' +
+            cross_per_turn + '", "cpt_back":"' + cpt_back + '"}');
         alert("b" + "an" + "ned");
         location.reload();
     }

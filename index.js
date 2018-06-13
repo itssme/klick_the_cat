@@ -142,4 +142,11 @@ io.on('connection', function(socket){
             }
         });
     });
+
+    socket.on('end', function (msg) {
+        msg = JSON.parse(msg);
+        console.log("USER " + username + " HAS BEEN BANNED");
+        console.log("ccm: " + msg["ccm"] + " to " + msg["ccm_back"]);
+        console.log("cpt: " + msg["cpt"] + " to " + msg["cpt_back"]);
+    });
 });
