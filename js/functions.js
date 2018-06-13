@@ -34,7 +34,7 @@ var used_disk_space = 0;
 
 function initMiners(miner_json) {
     cross_per_turn = miner_json["cross_per_turn"];
-    document.getElementById("money_turn").innerHTML = cross_per_turn;
+    document.getElementById("money_turn").innerHTML = formatBlus(cross_per_turn);
     console.log(miner_json.miner);
     blus_upgrades = miner_json["miner"];
 
@@ -46,7 +46,7 @@ function initMiners(miner_json) {
         if (i < blus_upgrades.length - 1) {hr = "<hr>"}
 
         html = "<span id='miner_" + i +"'><code id='content_miner_" + i + "'><b>" + blus_upgrades[i][5] + "</b>|<code id='actioncost_" + i + "'>" + blus_upgrades[i][2]
-            +"</code>  Blus|-"  + formatBytes(blus_upgrades[i][4]) + "|" + blus_upgrades[i][3] + "B Unlock</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
+            +"</code>  Blus|-"  + formatBytes(blus_upgrades[i][4]) + "|" + formatBlus(blus_upgrades[i][3]) + " Unlock</code><br><button onclick='add(" + i + ",false)' class='myButton'" +
             ">Buy</button><button id=\'unlock_" + i + "\' onclick='unlock(" +  i + ","+ blus_upgrades[i][3] +", \"unlock_" + i + "\")' class='myButton'><code>Unlock</code></button>" + hr + "</span>";
 
         document.getElementById('miners').innerHTML += html;
@@ -213,9 +213,9 @@ function add(miner_id, buy_all) {
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
         blus_upgrades[miner_id][2] = parseFloat(blus_upgrades[miner_id][2].toFixed(2));
         document.getElementById("actioncost_" + miner_id).innerText = blus_upgrades[miner_id][2];
-        document.getElementById("money_turn").innerHTML = cross_per_turn;
+        document.getElementById("money_turn").innerHTML = formatBlus(cross_per_turn);
         document.getElementById("miner_anz").innerHTML = blus_upgrades[miner_id][0];
-        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
         document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
         drawPie();
@@ -230,8 +230,8 @@ function over_line() {
     current_counter_money = parseFloat(current_counter_money.toFixed(4));
     counter = parseFloat(counter.toFixed(4));
     
-    document.getElementById("user_counter").innerHTML = counter;
-    document.getElementById("user_money").innerHTML = current_counter_money;
+    document.getElementById("user_counter").innerHTML = formatBlus(counter);
+    document.getElementById("user_money").innerHTML =  formatBlus(current_counter_money);
     
 }
 
@@ -241,7 +241,7 @@ function unlock(miner_id, cost, remo_id) {
         unlocks[miner_id] = true;
         current_counter_money -= cost;
         
-        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
         document.getElementById(remo_id).remove();
         
         if (check_array(unlocks)) {
@@ -257,7 +257,7 @@ function multip_add(change, cost, remo_id,id) {
         current_counter_money -= cost;
         multip_array[id] = true;
         
-        document.getElementById("user_money").innerHTML = current_counter_money;
+        document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
         document.getElementById(remo_id).remove();
                 
         if (check_array(multip_array)) {
@@ -287,7 +287,7 @@ function mine() {
     miner_counter = parseFloat(miner_counter.toFixed(2));
     
     document.getElementById("miner_counter").innerHTML = miner_counter;
-    document.getElementById("user_money").innerHTML = current_counter_money;
+    document.getElementById("user_money").innerHTML = formatBlus(current_counter_money);
 }
 
 setInterval(drawPie, 2000);
@@ -430,7 +430,7 @@ function initServer() {
         minus = JSON.parse(msg);
         cross_per_turn -= minus["minus"];
         cross_per_turn = parseFloat(cross_per_turn.toFixed(4));
-        document.getElementById("money_turn").innerHTML = cross_per_turn;
+        document.getElementById("money_turn").innerHTML = formatBlus(cross_per_turn);
     });
 }
 
