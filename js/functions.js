@@ -135,6 +135,7 @@ function sendMinus(minus_id, buy_all) {
         document.getElementById("available_disk_space").innerText = formatBytes(total_disk_space-getUsedDiskSpace());
 
         socket.emit('send_minus', '{"user_id":"' + user_selection + '", "minus_id":"' + minus_id + '"}');
+        drawPie();
     }
 }
 
@@ -318,11 +319,15 @@ function drawPie() {
     total_usage = [];
 
     for (let i = 0; i < blus_upgrades.length; i++) {
-        total_usage.push([blus_upgrades[i][0] * blus_upgrades[i][4], blus_upgrades[i][5]]);
+        if (blus_upgrades[i][0] >= 1) {
+            total_usage.push([blus_upgrades[i][0] * blus_upgrades[i][4], blus_upgrades[i][5]]);
+        }
     }
 
     for (let i = 0; i < minus_upgrades.length; i++) {
-        total_usage.push([minus_upgrades[i][0] * minus_upgrades[i][4], minus_upgrades[i][5]]);
+        if (minus_upgrades[i][0] >= 1) {
+            total_usage.push([minus_upgrades[i][0] * minus_upgrades[i][4], minus_upgrades[i][5]]);
+        }
     }
 
     sum = getUsedDiskSpace();
@@ -455,7 +460,7 @@ function initServer() {
     });
 }
 
-setInterval(get_users, 200);
+setInterval(get_users, 500);
 function get_users() {
     socket.emit('sync', '{"id": "' + user_id + '", "username": "' + username + '", "blus": "' + cross_per_turn + '"}');
 }
