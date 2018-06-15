@@ -73,8 +73,8 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/js/functions.js', function(req, res){
-    res.sendFile(__dirname + '/js/functions.js');
+app.get('/js/functions_min.js', function(req, res){
+    res.sendFile(__dirname + '/js/functions_min.js');
 });
 
 app.get('/resources/schmuserkadser.png', function(req, res) {

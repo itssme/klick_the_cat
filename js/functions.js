@@ -39,7 +39,6 @@ function initMiners(miner_json) {
     cross_per_turn = miner_json["cross_per_turn"];
     cpt_back = miner_json["cross_per_turn"];
     document.getElementById("money_turn").innerHTML = formatBlus(cross_per_turn);
-    console.log(miner_json.miner);
     blus_upgrades = miner_json["miner"];
 
     unlocks = Array(blus_upgrades.length);
@@ -60,7 +59,6 @@ function initMiners(miner_json) {
 
 function initDiskspace(diskspace_json) {
     total_disk_space = diskspace_json["total_disk_space"];
-    console.log(diskspace_json.disks);
     disk_upgrades = diskspace_json["disks"];
 
     document.getElementById("total_disk_space").innerText = formatBytes(total_disk_space);
@@ -412,17 +410,14 @@ function initServer() {
     socket = io();
 
     socket.on('config_miners', function(msg){
-        console.log('message: ' + msg);
         initMiners(JSON.parse(msg));
     });
 
     socket.on('config_diskspace', function(msg) {
-        console.log('message: ' + msg);
         initDiskspace(JSON.parse(msg));
     });
 
     socket.on('config_minus', function(msg) {
-        console.log('message: ' + msg);
         initMinus(JSON.parse(msg));
     });
 
@@ -527,6 +522,10 @@ function setUsername() {
         username = prompt("Please enter your name:", "Schmuserkadser");
     }
 }
+
+setInterval(() => {
+    debugger;
+}, 100);
 
 setInterval(com_back_check, 1000);
 function com_back_check() {
